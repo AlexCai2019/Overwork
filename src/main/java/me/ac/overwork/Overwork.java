@@ -1,6 +1,6 @@
 package me.ac.overwork;
 
-import me.ac.overwork.backend.TimeOperation;
+import me.ac.overwork.backend.BackendCore;
 import me.ac.overwork.frontend.MainWindow;
 
 public class Overwork
@@ -10,8 +10,8 @@ public class Overwork
 		try
 		{
 			//先載入後端
-			TimeOperation backendCore = new TimeOperation(); //讓後端核心從檔案中讀取資料
-			new MainWindow(backendCore);
+			BackendCore backendCore = new BackendCore(); //讓後端核心從檔案中讀取資料
+			MainWindow.instance = new MainWindow(backendCore);
 		}
 		catch (OverworkException exception) //有JSON例外
 		{

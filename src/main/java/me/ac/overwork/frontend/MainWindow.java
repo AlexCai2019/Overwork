@@ -1,6 +1,6 @@
 package me.ac.overwork.frontend;
 
-import me.ac.overwork.backend.TimeOperation;
+import me.ac.overwork.backend.BackendCore;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,32 +11,33 @@ import java.net.URL;
 @SuppressWarnings("UnnecessaryUnicodeEscape") //為了避免亂碼
 public class MainWindow
 {
-	private final TimeOperation backendCore;
-	private final TimePanel timePanelManager;
+	public static MainWindow instance;
+
+	final TimePanel timePanelManager;
+	final ControlPanel controlPanelManager;
 
 	static final String FONT_NAME = "Microsoft JhengHei UI";
-	static final int WIDTH = 480;
-	static final int HEIGHT = 960;
+	private static final int WIDTH = 480;
+	private static final int HEIGHT = 720;
 
-	private final JFrame mainWindow = new JFrame("\u52a0\u73ed\u53f0\u5012\u6578"); //加班台倒數
-
-	public MainWindow(TimeOperation backendCore)
+	public MainWindow(BackendCore backendCore)
 	{
-		this.backendCore = backendCore; //讓後端核心從檔案中讀取資料
-
+		//加班台倒數
+		JFrame mainWindow = new JFrame("\u52a0\u73ed\u53f0\u5012\u6578");
 		URL icon = MainWindow.class.getResource("/clock.png");
 		if (icon != null)
 			mainWindow.setIconImage(new ImageIcon(icon).getImage());
 		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //按叉叉就結束
+		mainWindow.setLayout(new GridLayout(4, 1));
 		mainWindow.addWindowListener(new WindowAdapter()
 		{
 			@Override
 			public void windowClosing(WindowEvent e)
 			{
-				timePanelManager.onMainWindowClosing();
-
-				mainWindow.dispose();
-				System.exit(0);
+				backendCore.onApplicationQuit(); //後端關閉
+				timePanelManager.onMainWindowClosing(); //計時關閉
+				controlPanelManager.onMainWindowClosing(); //操作關閉
+				System.exit(0); //結束
 			}
 		});
 		mainWindow.setBounds(0, 0, WIDTH, HEIGHT);
@@ -47,17 +48,10 @@ public class MainWindow
 		mainWindow.add(timePanelManager.getPanel());
 
 		//操作介面
-		mainWindow.add(createControlPanel());
+		controlPanelManager = new ControlPanel(backendCore);
+		mainWindow.add(controlPanelManager.getPanel());
 
 		mainWindow.setVisible(true);
-	}
-
-	private JPanel createControlPanel()
-	{
-		JPanel controlPanel = new JPanel();
-		controlPanel.setBounds(0, 0, WIDTH, HEIGHT * 4 / 5);
-
-		return controlPanel;
 	}
 
 	public static void messageBox(String message)

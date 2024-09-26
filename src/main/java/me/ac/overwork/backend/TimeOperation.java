@@ -16,36 +16,51 @@ public class TimeOperation
 	private final int[] passTime; //經過時間
 	private final JSONHelper jsonCore;
 
-	public TimeOperation() throws OverworkException
+	public TimeOperation(JSONHelper jsonCore) throws OverworkException
 	{
-		jsonCore = new JSONHelper();
+		this.jsonCore = jsonCore;
 		remainTime = jsonCore.getTimeArray("remainTime"); //讀取成功
 		passTime = jsonCore.getTimeArray("passTime"); //讀取成功
 	}
 
-	public void addTime(int value, TimeUnit unit)
+	public void addRemainTime()
+	{
+		addTime(remainTime, 1, TimeUnit.SECONDS);
+	}
+
+	public void addRemainTime(int value, TimeUnit unit)
+	{
+		addTime(remainTime, value, unit);
+	}
+
+	public void addPassTime()
+	{
+		addTime(passTime, 1, TimeUnit.SECONDS);
+	}
+
+	private void addTime(int[] time, int value, TimeUnit unit)
 	{
 		switch (unit)
 		{
-			case HOURS -> remainTime[HOUR] += value;
-			case MINUTES -> remainTime[MINUTE] += value;
-			case SECONDS -> remainTime[SECOND] += value;
+			case HOURS -> time[HOUR] += value;
+			case MINUTES -> time[MINUTE] += value;
+			case SECONDS -> time[SECOND] += value;
 		}
 
-		if (remainTime[SECOND] >= 60) //加的時間讓秒超過了60
+		if (time[SECOND] >= 60) //加的時間讓秒超過了60
 		{
-			remainTime[MINUTE] += remainTime[SECOND] / 60; //將超過的秒加到分鐘上
-			remainTime[SECOND] %= 60; //餘下的秒
+			time[MINUTE] += time[SECOND] / 60; //將超過的秒加到分鐘上
+			time[SECOND] %= 60; //餘下的秒
 		}
 
-		if (remainTime[MINUTE] >= 60) //加的時間讓分鐘超過了60
+		if (time[MINUTE] >= 60) //加的時間讓分鐘超過了60
 		{
-			remainTime[HOUR] += remainTime[MINUTE] / 60; //將超過的分鐘加到小時上
-			remainTime[MINUTE] %= 60; //餘下的分鐘
+			time[HOUR] += time[MINUTE] / 60; //將超過的分鐘加到小時上
+			time[MINUTE] %= 60; //餘下的分鐘
 		}
 	}
 
-	public void subtractTime()
+	public void subtractRemainTime()
 	{
 		if (remainTime[HOUR] == 0 && remainTime[MINUTE] == 0 && remainTime[SECOND] == 0) //時間到了
 			return;
@@ -65,7 +80,7 @@ public class TimeOperation
 		remainTime[HOUR]--;
 	}
 
-	public void subtractTime(int value, TimeUnit unit)
+	public void subtractRemainTime(int value, TimeUnit unit)
 	{
 		switch (unit)
 		{
