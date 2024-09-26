@@ -6,6 +6,6 @@ public class Overwork
 {
 	public static void main(String[] args)
 	{
-		MainWindow.instance.showWindow(true);
+		new MainWindow();
 	}
 }
