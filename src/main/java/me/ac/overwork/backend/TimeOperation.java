@@ -1,5 +1,7 @@
 package me.ac.overwork.backend;
 
+import me.ac.overwork.OverworkException;
+
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
@@ -12,10 +14,11 @@ public class TimeOperation
 
 	private final int[] remainTime; //剩餘時間
 	private final int[] passTime; //經過時間
+	private final JSONHelper jsonCore;
 
-	public TimeOperation() throws JSONFileException
+	public TimeOperation() throws OverworkException
 	{
-		JSONHelper jsonCore = new JSONHelper();
+		jsonCore = new JSONHelper();
 		remainTime = jsonCore.getTimeArray("remainTime"); //讀取成功
 		passTime = jsonCore.getTimeArray("passTime"); //讀取成功
 	}
@@ -102,5 +105,8 @@ public class TimeOperation
 
 	public void saveFile()
 	{
+		jsonCore.setTimeArray("remainTime", remainTime); //儲存到JSON
+		jsonCore.setTimeArray("passTime", passTime); //儲存到JSON
+		jsonCore.saveJSON(JSONHelper.SAVE_FILE_NAME); //寫檔
 	}
 }

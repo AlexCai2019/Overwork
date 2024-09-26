@@ -1,5 +1,7 @@
 package me.ac.overwork.backend;
 
+import me.ac.overwork.OverworkException;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.CharacterCodingException;
@@ -22,15 +24,15 @@ public class FileHelper
 		}
 		catch (NoSuchFileException nsfE)
 		{
-			throw new JSONFileException("\u627e\u4e0d\u5230 \"" + fileName + "\" \u6a94\u6848"); //找不到 "fileName" 檔案
+			throw new OverworkException("\u627e\u4e0d\u5230 \"" + fileName + "\" \u6a94\u6848"); //找不到 "fileName" 檔案
 		}
 		catch (CharacterCodingException ccE)
 		{
-			throw new JSONFileException("\u6a94\u6848\u7de8\u78bc\u7570\u5e38\uff0c\u8acb\u6aa2\u67e5\u7de8\u78bc"); //檔案編碼異常，請檢查編碼
+			throw new OverworkException("\u6a94\u6848\u7de8\u78bc\u7570\u5e38\uff0c\u8acb\u6aa2\u67e5\u7de8\u78bc"); //檔案編碼異常，請檢查編碼
 		}
 		catch (IOException exception)
 		{
-			throw new JSONFileException(exception);
+			throw new OverworkException(exception);
 		}
 	}
 
@@ -42,7 +44,7 @@ public class FileHelper
 		}
 		catch (IOException exception)
 		{
-			throw new JSONFileException(exception);
+			throw new OverworkException(exception);
 		}
 	}
 }
