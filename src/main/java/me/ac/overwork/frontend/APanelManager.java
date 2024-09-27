@@ -5,7 +5,7 @@ import me.ac.overwork.backend.TimeOperation;
 
 import javax.swing.*;
 
-public abstract class APanelManager
+public class APanelManager
 {
 	protected final JPanel myPanel = new JPanel();
 	protected final TimeOperation timeOperation ; //時間處理類別
@@ -14,6 +14,4 @@ public abstract class APanelManager
 	{
 		timeOperation = BackendCore.instance.getTimeOperation();
 	}
-
-	abstract void onMainWindowClosing();
 }

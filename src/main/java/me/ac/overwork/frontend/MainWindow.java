@@ -13,12 +13,12 @@ public class MainWindow
 {
 	public static MainWindow instance;
 
-	final TimePanel timePanelManager;
-	final ControlPanel controlPanelManager;
+	public final TimePanel timePanelManager;
+	public final ControlPanel controlPanelManager;
 
 	static final String FONT_NAME = "Microsoft JhengHei UI";
-	private static final int WIDTH = 480;
-	private static final int HEIGHT = 720;
+	static final int WIDTH = 480;
+	static final int HEIGHT = 640;
 
 	public MainWindow()
 	{
@@ -28,15 +28,13 @@ public class MainWindow
 		if (icon != null)
 			mainWindow.setIconImage(new ImageIcon(icon).getImage());
 		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //按叉叉就結束
-		mainWindow.setLayout(new GridLayout(4, 1));
+		mainWindow.setLayout(null);
 		mainWindow.addWindowListener(new WindowAdapter()
 		{
 			@Override
 			public void windowClosing(WindowEvent e)
 			{
 				BackendCore.instance.onApplicationQuit(); //後端關閉
-				timePanelManager.onMainWindowClosing(); //計時關閉
-				controlPanelManager.onMainWindowClosing(); //操作關閉
 				System.exit(0); //結束
 			}
 		});

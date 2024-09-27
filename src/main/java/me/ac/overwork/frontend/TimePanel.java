@@ -5,10 +5,6 @@ import me.ac.overwork.backend.TimeOperation;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("UnnecessaryUnicodeEscape") //為了避免亂碼
 public class TimePanel extends APanelManager
@@ -16,11 +12,9 @@ public class TimePanel extends APanelManager
 	final JLabel remainTimeLabel = new JLabel("", SwingConstants.CENTER);
 	final JLabel passTimeLabel = new JLabel("", SwingConstants.CENTER);
 
-	private ScheduledExecutorService executorService = null;
-	private ScheduledFuture<?> everySecond;
-
 	TimePanel()
 	{
+		myPanel.setBounds(0, 0, MainWindow.WIDTH, MainWindow.HEIGHT * 3 / 10);
 		myPanel.setLayout(new GridLayout(4, 1)); //只會放4個物件
 		myPanel.setBorder(new EmptyBorder(5, 10, 5, 10)); //為上下左右預留空間
 		myPanel.setBackground(Color.GREEN); //方便OBS去背
@@ -45,32 +39,7 @@ public class TimePanel extends APanelManager
 		updateTimeLabel(); //更新時間數字
 	}
 
-	//不用後端計時，修改比較方便
-	void startTimer()
-	{
-		if (executorService != null) //已經開始了
-			return;
-		executorService = Executors.newSingleThreadScheduledExecutor(); //處理中控
-		everySecond = executorService.scheduleAtFixedRate(() -> //每秒執行
-		{
-			timeOperation.subtractRemainTime(); //減少剩餘時間1秒
-			timeOperation.addPassTime(); //增加經過時間1秒
-
-			updateTimeLabel(); //根據後端的資料更新顯示數字
-			MainWindow.instance.controlPanelManager.updateTimeFields(timeOperation.getRemainTime()); //更新輸入框的數字
-		}, 0, 1, TimeUnit.SECONDS);
-	}
-
-	void pauseTimer()
-	{
-		if (executorService == null) //已經結束了
-			return;
-		everySecond.cancel(true);
-		executorService.shutdown();
-		executorService = null;
-	}
-
-	void updateTimeLabel()
+	public void updateTimeLabel()
 	{
 		remainTimeLabel.setText(formatTime(timeOperation.getRemainTime())); //剩餘時間
 		passTimeLabel.setText(formatTime(timeOperation.getPassTime())); //經過時間
@@ -79,11 +48,5 @@ public class TimePanel extends APanelManager
 	private String formatTime(int[] time)
 	{
 		return String.format("%05d:%02d:%02d", time[TimeOperation.HOUR], time[TimeOperation.MINUTE], time[TimeOperation.SECOND]);
-	}
-
-	@Override
-	void onMainWindowClosing()
-	{
-		pauseTimer();
 	}
 }

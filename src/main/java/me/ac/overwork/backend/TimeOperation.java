@@ -1,8 +1,12 @@
 package me.ac.overwork.backend;
 
 import me.ac.overwork.OverworkException;
+import me.ac.overwork.frontend.MainWindow;
 
 import java.util.Arrays;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("UnnecessaryUnicodeEscape")
@@ -15,6 +19,9 @@ public class TimeOperation
 	private final int[] remainTime; //剩餘時間
 	private final int[] passTime; //經過時間
 	private final JSONHelper jsonCore;
+
+	private ScheduledExecutorService executorService = null;
+	private ScheduledFuture<?> everySecond;
 
 	TimeOperation(JSONHelper jsonCore) throws OverworkException
 	{
@@ -129,10 +136,37 @@ public class TimeOperation
 		return passTime.clone();
 	}
 
-	public void saveFile()
+	//不用後端計時，修改比較方便
+	public void startTimer()
+	{
+		if (executorService != null) //已經開始了
+			return;
+		executorService = Executors.newSingleThreadScheduledExecutor(); //處理中控
+		everySecond = executorService.scheduleAtFixedRate(() -> //每秒執行
+		{
+			subtractRemainTime(); //減少剩餘時間1秒
+			addPassTime(); //增加經過時間1秒
+
+			MainWindow.instance.timePanelManager.updateTimeLabel(); //根據資料更新顯示數字
+		}, 0, 1, TimeUnit.SECONDS);
+	}
+
+	public void pauseTimer()
+	{
+		if (executorService == null) //已經結束了
+			return;
+		everySecond.cancel(true);
+		executorService.shutdown();
+		executorService = null;
+
+		MainWindow.instance.controlPanelManager.updateRemainFields(remainTime); //根據資料更新輸入框數字
+	}
+
+	public void onApplicationQuit()
 	{
 		jsonCore.setTimeArray("remainTime", remainTime); //儲存到JSON
 		jsonCore.setTimeArray("passTime", passTime); //儲存到JSON
 		jsonCore.saveJSON(JSONHelper.SAVE_FILE_NAME); //寫檔
+		pauseTimer();
 	}
 }

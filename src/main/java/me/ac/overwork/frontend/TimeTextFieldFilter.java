@@ -1,23 +1,20 @@
 package me.ac.overwork.frontend;
 
-import javax.swing.*;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.DocumentFilter;
 import java.util.regex.Pattern;
 
-public sealed class TimeTextFieldFilter extends DocumentFilter permits HourTextFieldFilter
+public sealed class TimeTextFieldFilter extends DocumentFilter permits HourTextFieldFilter, MinuteSecondFieldFilter
 {
 	private final Pattern numbersRegex;
-	private final JTextField[] timePanelFields;
-	private final int[] times;
-	private final int boundIndex;
+	private final int[] times; //後端時間陣列 remain或pass
+	private final int boundIndex; //對應的陣列索引
 
-	TimeTextFieldFilter(int length, JTextField[] timePanelFields, int[] times, int boundIndex)
+	TimeTextFieldFilter(int length, int[] times, int boundIndex)
 	{
 		numbersRegex = Pattern.compile("\\d{0," + length + '}');
-		this.timePanelFields = timePanelFields;
 		this.times = times;
 		this.boundIndex = boundIndex;
 	}
@@ -30,8 +27,11 @@ public sealed class TimeTextFieldFilter extends DocumentFilter permits HourTextF
 				.insert(offset, text)
 				.toString();
 
-		if (numbersRegex.matcher(content).matches()) //是數字 通過
+		if (isValid(content)) //是數字 通過
+		{
 			super.insertString(fb, offset, text, attrs);
+			update(content);
+		}
 	}
 
 	@Override
@@ -42,8 +42,11 @@ public sealed class TimeTextFieldFilter extends DocumentFilter permits HourTextF
 				.replace(offset, offset + length, text)
 				.toString();
 
-		if (numbersRegex.matcher(content).matches()) //是數字 通過
+		if (isValid(content)) //是數字 通過
+		{
 			super.replace(fb, offset, length, text, attrs);
+			update(content);
+		}
 	}
 
 	@Override
@@ -54,25 +57,42 @@ public sealed class TimeTextFieldFilter extends DocumentFilter permits HourTextF
 				.delete(offset, offset + length)
 				.toString();
 
-		if (numbersRegex.matcher(content).matches()) //是數字 通過
+		if (isValid(content)) //是數字 通過
 		{
 			super.remove(fb, offset, length);
 			update(content);
 		}
 	}
 
+	protected boolean isValid(String content)
+	{
+		return numbersRegex.matcher(content).matches();
+	}
+
 	private void update(String content)
 	{
-		String newTime = content.isEmpty() ? "0" : content;
-		times[boundIndex] = Integer.parseInt(newTime); //更新後端
-		timePanelFields[boundIndex].setText(newTime); //更新時間面板
+		times[boundIndex] = content.isEmpty() ? 0 : Integer.parseInt(content); //更新後端
 	}
 }
 
 final class HourTextFieldFilter extends TimeTextFieldFilter
 {
-	HourTextFieldFilter(JTextField[] timePanelFields, int[] times, int boundIndex)
+	HourTextFieldFilter(int[] times, int boundIndex)
 	{
-		super(5, timePanelFields, times, boundIndex); //小時最高到五位數
+		super(5, times, boundIndex); //小時最高到五位數
+	}
+}
+
+final class MinuteSecondFieldFilter extends TimeTextFieldFilter
+{
+	MinuteSecondFieldFilter(int[] times, int boundIndex)
+	{
+		super(2, times, boundIndex); //分鐘和秒最高二位數
+	}
+
+	@Override
+	protected boolean isValid(String content)
+	{
+		return super.isValid(content) && (content.length() <= 1 || content.charAt(0) < '6');
 	}
 }

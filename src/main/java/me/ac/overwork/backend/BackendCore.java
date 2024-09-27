@@ -20,6 +20,6 @@ public class BackendCore
 
 	public void onApplicationQuit()
 	{
-		timeOperation.saveFile();
+		timeOperation.onApplicationQuit();
 	}
 }
