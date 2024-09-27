@@ -20,7 +20,7 @@ public class MainWindow
 	private static final int WIDTH = 480;
 	private static final int HEIGHT = 720;
 
-	public MainWindow(BackendCore backendCore)
+	public MainWindow()
 	{
 		//加班台倒數
 		JFrame mainWindow = new JFrame("\u52a0\u73ed\u53f0\u5012\u6578");
@@ -34,7 +34,7 @@ public class MainWindow
 			@Override
 			public void windowClosing(WindowEvent e)
 			{
-				backendCore.onApplicationQuit(); //後端關閉
+				BackendCore.instance.onApplicationQuit(); //後端關閉
 				timePanelManager.onMainWindowClosing(); //計時關閉
 				controlPanelManager.onMainWindowClosing(); //操作關閉
 				System.exit(0); //結束
@@ -44,12 +44,12 @@ public class MainWindow
 		mainWindow.setResizable(false);
 
 		//時間介面
-		timePanelManager = new TimePanel(backendCore); //現在才創 為了給載入JSON留時間
-		mainWindow.add(timePanelManager.getPanel());
+		timePanelManager = new TimePanel(); //現在才創 為了給載入JSON留時間
+		mainWindow.add(timePanelManager.myPanel);
 
 		//操作介面
-		controlPanelManager = new ControlPanel(backendCore);
-		mainWindow.add(controlPanelManager.getPanel());
+		controlPanelManager = new ControlPanel();
+		mainWindow.add(controlPanelManager.myPanel);
 
 		mainWindow.setVisible(true);
 	}

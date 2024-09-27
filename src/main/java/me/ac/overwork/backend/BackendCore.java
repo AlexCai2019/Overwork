@@ -4,12 +4,13 @@ import me.ac.overwork.OverworkException;
 
 public class BackendCore
 {
+	public static BackendCore instance;
+
 	private final TimeOperation timeOperation; //讓後端核心從檔案中讀取資料
 
 	public BackendCore() throws OverworkException
 	{
-		JSONHelper jsonCore = new JSONHelper();
-		timeOperation = new TimeOperation(jsonCore);
+		timeOperation = new TimeOperation(new JSONHelper()); //建立時間處理核心 有任何例外就丟給main
 	}
 
 	public TimeOperation getTimeOperation()

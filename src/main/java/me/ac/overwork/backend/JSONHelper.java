@@ -58,10 +58,10 @@ public class JSONHelper
 
 	void setTimeArray(String key, int[] values)
 	{
-		JsonArray timeArray = new JsonArray(3);
+		JsonArray timeArray = new JsonArray(3); //創立JSON array
 		for (int value : values)
-			timeArray.add(value);
-		save.add(key, timeArray);
+			timeArray.add(value); //寫入
+		save.add(key, timeArray); //將array寫入root json
 	}
 
 	void saveJSON(String fileName) throws OverworkException

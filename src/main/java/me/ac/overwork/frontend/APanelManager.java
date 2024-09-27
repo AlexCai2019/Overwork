@@ -8,18 +8,11 @@ import javax.swing.*;
 public abstract class APanelManager
 {
 	protected final JPanel myPanel = new JPanel();
-	protected final BackendCore backendCore;
 	protected final TimeOperation timeOperation ; //時間處理類別
 
-	APanelManager(BackendCore backendCore)
+	APanelManager()
 	{
-		this.backendCore = backendCore;
-		timeOperation = backendCore.getTimeOperation();
-	}
-
-	JPanel getPanel()
-	{
-		return myPanel;
+		timeOperation = BackendCore.instance.getTimeOperation();
 	}
 
 	abstract void onMainWindowClosing();

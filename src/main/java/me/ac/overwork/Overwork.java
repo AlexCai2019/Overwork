@@ -10,8 +10,8 @@ public class Overwork
 		try
 		{
 			//先載入後端
-			BackendCore backendCore = new BackendCore(); //讓後端核心從檔案中讀取資料
-			MainWindow.instance = new MainWindow(backendCore);
+			BackendCore.instance = new BackendCore(); //讓後端核心從檔案中讀取資料
+			MainWindow.instance = new MainWindow();
 		}
 		catch (OverworkException exception) //有JSON例外
 		{

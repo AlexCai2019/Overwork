@@ -16,16 +16,17 @@ public class TimeOperation
 	private final int[] passTime; //經過時間
 	private final JSONHelper jsonCore;
 
-	public TimeOperation(JSONHelper jsonCore) throws OverworkException
+	TimeOperation(JSONHelper jsonCore) throws OverworkException
 	{
-		this.jsonCore = jsonCore;
-		remainTime = jsonCore.getTimeArray("remainTime"); //讀取成功
-		passTime = jsonCore.getTimeArray("passTime"); //讀取成功
+		this.jsonCore = jsonCore; //JSON處理核心
+		//讀取失敗就會throw
+		remainTime = jsonCore.getTimeArray("remainTime"); //剩餘時間
+		passTime = jsonCore.getTimeArray("passTime"); //經過時間
 	}
 
 	public void addRemainTime()
 	{
-		addTime(remainTime, 1, TimeUnit.SECONDS);
+		addTime(remainTime, 1, TimeUnit.SECONDS); //減少剩餘時間一秒
 	}
 
 	public void addRemainTime(int value, TimeUnit unit)
@@ -35,7 +36,7 @@ public class TimeOperation
 
 	public void addPassTime()
 	{
-		addTime(passTime, 1, TimeUnit.SECONDS);
+		addTime(passTime, 1, TimeUnit.SECONDS); //增加經過時間一秒
 	}
 
 	private void addTime(int[] time, int value, TimeUnit unit)
@@ -106,6 +107,16 @@ public class TimeOperation
 		remainTime[MINUTE] = remainMinutes % 60;
 
 		remainTime[HOUR] = remainMinutes / 60;
+	}
+
+	public void setRemainTime(int value, TimeUnit unit)
+	{
+		switch (unit)
+		{
+			case HOURS -> remainTime[HOUR] = value;
+			case MINUTES -> remainTime[MINUTE] = value;
+			case SECONDS -> remainTime[SECOND] = value;
+		}
 	}
 
 	public int[] getRemainTime()

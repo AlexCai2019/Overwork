@@ -1,6 +1,5 @@
 package me.ac.overwork.frontend;
 
-import me.ac.overwork.backend.BackendCore;
 import me.ac.overwork.backend.TimeOperation;
 
 import javax.swing.*;
@@ -20,10 +19,8 @@ public class TimePanel extends APanelManager
 	private ScheduledExecutorService executorService = null;
 	private ScheduledFuture<?> everySecond;
 
-	TimePanel(BackendCore backendCore)
+	TimePanel()
 	{
-		super(backendCore);
-
 		myPanel.setLayout(new GridLayout(4, 1)); //只會放4個物件
 		myPanel.setBorder(new EmptyBorder(5, 10, 5, 10)); //為上下左右預留空間
 		myPanel.setBackground(Color.GREEN); //方便OBS去背
@@ -35,10 +32,7 @@ public class TimePanel extends APanelManager
 		remainTimeText.setFont(fixedTextFont); //是固定文字
 		myPanel.add(remainTimeText);
 
-		TimeOperation timeOperation = backendCore.getTimeOperation();
-
 		remainTimeLabel.setFont(numberFont); //剩餘時間 數字
-		remainTimeLabel.setText(formatTime(timeOperation.getRemainTime()));
 		myPanel.add(remainTimeLabel);
 
 		JLabel passTimeText = new JLabel("\u7d93\u904e\u6642\u9593"); //經過時間 文字
@@ -46,8 +40,9 @@ public class TimePanel extends APanelManager
 		myPanel.add(passTimeText); //放入panel中
 
 		passTimeLabel.setFont(numberFont); //經過時間 數字
-		passTimeLabel.setText(formatTime(timeOperation.getPassTime()));
 		myPanel.add(passTimeLabel); //放入panel中
+
+		updateTimeLabel(); //更新時間數字
 	}
 
 	//不用後端計時，修改比較方便
@@ -61,8 +56,8 @@ public class TimePanel extends APanelManager
 			timeOperation.subtractRemainTime(); //減少剩餘時間1秒
 			timeOperation.addPassTime(); //增加經過時間1秒
 
-			remainTimeLabel.setText(formatTime(timeOperation.getRemainTime())); //設定文字
-			passTimeLabel.setText(formatTime(timeOperation.getPassTime())); //設定文字
+			updateTimeLabel(); //根據後端的資料更新顯示數字
+			MainWindow.instance.controlPanelManager.updateTimeFields(timeOperation.getRemainTime()); //更新輸入框的數字
 		}, 0, 1, TimeUnit.SECONDS);
 	}
 
@@ -73,6 +68,12 @@ public class TimePanel extends APanelManager
 		everySecond.cancel(true);
 		executorService.shutdown();
 		executorService = null;
+	}
+
+	void updateTimeLabel()
+	{
+		remainTimeLabel.setText(formatTime(timeOperation.getRemainTime())); //剩餘時間
+		passTimeLabel.setText(formatTime(timeOperation.getPassTime())); //經過時間
 	}
 
 	private String formatTime(int[] time)
