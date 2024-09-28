@@ -37,16 +37,24 @@ public class JSONHelper
 		JsonElement element = save.get(key); //尋找key
 		if (element == null) //找不到
 			throw new OverworkException("\u5728 " + SAVE_FILE_NAME + " \u5167\u627e\u4e0d\u5230 \"" + key + '"'); //在 save.json 內找不到 "key"
-		if (!(element instanceof JsonArray jsonArray) || jsonArray.size() != 3) //不是時 分 秒
-			throw new OverworkException(key + " \u683c\u5f0f\u932f\u8aa4"); //格式錯誤
+
+		JsonObject timeObject; //時間物件
+		try
+		{
+			timeObject = element.getAsJsonObject();
+		}
+		catch (IllegalStateException exception) //不是JsonObject
+		{
+			throw new OverworkException(key + " \u4e0d\u662fJSON\u7269\u4ef6"); //不是JSON物件
+		}
 
 		int[] timeArray = new int[3];
 
 		try
 		{
-			timeArray[TimeOperation.HOUR] = jsonArray.get(TimeOperation.HOUR).getAsJsonPrimitive().getAsInt(); //小時
-			timeArray[TimeOperation.MINUTE] = jsonArray.get(TimeOperation.MINUTE).getAsJsonPrimitive().getAsInt(); //分鐘
-			timeArray[TimeOperation.SECOND] = jsonArray.get(TimeOperation.SECOND).getAsJsonPrimitive().getAsInt(); //秒
+			timeArray[TimeOperation.HOUR] = timeObject.get("hour").getAsJsonPrimitive().getAsInt(); //小時
+			timeArray[TimeOperation.MINUTE] = timeObject.get("minute").getAsJsonPrimitive().getAsInt(); //分鐘
+			timeArray[TimeOperation.SECOND] = timeObject.get("second").getAsJsonPrimitive().getAsInt(); //秒
 		}
 		catch (IllegalStateException | NumberFormatException exception) //不是JsonPrimitive 或 不是數字字串
 		{
@@ -58,10 +66,11 @@ public class JSONHelper
 
 	void setTimeArray(String key, int[] values)
 	{
-		JsonArray timeArray = new JsonArray(3); //創立JSON array
-		for (int value : values)
-			timeArray.add(value); //寫入
-		save.add(key, timeArray); //將array寫入root json
+		JsonObject timeObject = new JsonObject();
+		timeObject.addProperty("hour", values[TimeOperation.HOUR]);
+		timeObject.addProperty("minute", values[TimeOperation.MINUTE]);
+		timeObject.addProperty("second", values[TimeOperation.SECOND]);
+		save.add(key, timeObject); //將物件寫入root json
 	}
 
 	void saveJSON(String fileName) throws OverworkException

@@ -6,17 +6,18 @@ import javax.swing.text.Document;
 import javax.swing.text.DocumentFilter;
 import java.util.regex.Pattern;
 
-public sealed class TimeTextFieldFilter extends DocumentFilter permits HourTextFieldFilter, MinuteSecondFieldFilter
+sealed class TimeTextFieldFilter extends DocumentFilter permits MinuteSecondFieldFilter
 {
 	private final Pattern numbersRegex;
-	private final int[] times; //後端時間陣列 remain或pass
-	private final int boundIndex; //對應的陣列索引
 
-	TimeTextFieldFilter(int length, int[] times, int boundIndex)
+	TimeTextFieldFilter()
+	{
+		numbersRegex = Pattern.compile("\\d{0,5}");
+	}
+
+	TimeTextFieldFilter(int length)
 	{
 		numbersRegex = Pattern.compile("\\d{0," + length + '}');
-		this.times = times;
-		this.boundIndex = boundIndex;
 	}
 
 	@Override
@@ -28,10 +29,7 @@ public sealed class TimeTextFieldFilter extends DocumentFilter permits HourTextF
 				.toString();
 
 		if (isValid(content)) //是數字 通過
-		{
 			super.insertString(fb, offset, text, attrs);
-			update(content);
-		}
 	}
 
 	@Override
@@ -43,10 +41,7 @@ public sealed class TimeTextFieldFilter extends DocumentFilter permits HourTextF
 				.toString();
 
 		if (isValid(content)) //是數字 通過
-		{
 			super.replace(fb, offset, length, text, attrs);
-			update(content);
-		}
 	}
 
 	@Override
@@ -58,41 +53,25 @@ public sealed class TimeTextFieldFilter extends DocumentFilter permits HourTextF
 				.toString();
 
 		if (isValid(content)) //是數字 通過
-		{
 			super.remove(fb, offset, length);
-			update(content);
-		}
 	}
 
 	protected boolean isValid(String content)
 	{
 		return numbersRegex.matcher(content).matches();
 	}
-
-	private void update(String content)
-	{
-		times[boundIndex] = content.isEmpty() ? 0 : Integer.parseInt(content); //更新後端
-	}
-}
-
-final class HourTextFieldFilter extends TimeTextFieldFilter
-{
-	HourTextFieldFilter(int[] times, int boundIndex)
-	{
-		super(5, times, boundIndex); //小時最高到五位數
-	}
 }
 
 final class MinuteSecondFieldFilter extends TimeTextFieldFilter
 {
-	MinuteSecondFieldFilter(int[] times, int boundIndex)
+	MinuteSecondFieldFilter()
 	{
-		super(2, times, boundIndex); //分鐘和秒最高二位數
+		super(2); //分鐘和秒最高二位數
 	}
 
 	@Override
 	protected boolean isValid(String content)
 	{
-		return super.isValid(content) && (content.length() <= 1 || content.charAt(0) < '6');
+		return super.isValid(content) && (content.length() <= 1 || content.charAt(0) < '6'); //是數字或空 且小於60
 	}
 }

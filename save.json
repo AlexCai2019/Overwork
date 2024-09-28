@@ -1,4 +1,12 @@
 {
-	"remainTime": [0,0,0],
-	"passTime": [0,0,0]
+  "remainTime": {
+    "hour": 0,
+    "minute": 0,
+    "second": 0
+  },
+  "passTime": {
+    "hour": 0,
+    "minute": 0,
+    "second": 0
+  }
 }

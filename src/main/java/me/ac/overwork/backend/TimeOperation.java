@@ -116,6 +116,13 @@ public class TimeOperation
 		remainTime[HOUR] = remainMinutes / 60;
 	}
 
+	public void setRemainTime(int[] remainTime)
+	{
+		this.remainTime[HOUR] = remainTime[HOUR];
+		this.remainTime[MINUTE] = remainTime[MINUTE];
+		this.remainTime[SECOND] = remainTime[SECOND];
+	}
+
 	public void setRemainTime(int value, TimeUnit unit)
 	{
 		switch (unit)
@@ -158,8 +165,6 @@ public class TimeOperation
 		everySecond.cancel(true);
 		executorService.shutdown();
 		executorService = null;
-
-		MainWindow.instance.controlPanelManager.updateRemainFields(remainTime); //根據資料更新輸入框數字
 	}
 
 	public void onApplicationQuit()
