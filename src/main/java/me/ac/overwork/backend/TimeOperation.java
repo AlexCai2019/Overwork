@@ -31,11 +31,6 @@ public class TimeOperation
 		passTime = jsonCore.getTimeArray("passTime"); //經過時間
 	}
 
-	public void addRemainTime()
-	{
-		addTime(remainTime, 1, TimeUnit.SECONDS); //減少剩餘時間一秒
-	}
-
 	public void addRemainTime(int value, TimeUnit unit)
 	{
 		addTime(remainTime, value, unit);
@@ -116,13 +111,6 @@ public class TimeOperation
 		remainTime[HOUR] = remainMinutes / 60;
 	}
 
-	public void setRemainTime(int[] remainTime)
-	{
-		this.remainTime[HOUR] = remainTime[HOUR];
-		this.remainTime[MINUTE] = remainTime[MINUTE];
-		this.remainTime[SECOND] = remainTime[SECOND];
-	}
-
 	public void setRemainTime(int value, TimeUnit unit)
 	{
 		switch (unit)
@@ -130,6 +118,16 @@ public class TimeOperation
 			case HOURS -> remainTime[HOUR] = value;
 			case MINUTES -> remainTime[MINUTE] = value;
 			case SECONDS -> remainTime[SECOND] = value;
+		}
+	}
+
+	public void setPassTime(int value, TimeUnit unit)
+	{
+		switch (unit)
+		{
+			case HOURS -> passTime[HOUR] = value;
+			case MINUTES -> passTime[MINUTE] = value;
+			case SECONDS -> passTime[SECOND] = value;
 		}
 	}
 

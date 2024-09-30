@@ -1,6 +1,7 @@
 package me.ac.overwork.frontend;
 
 import me.ac.overwork.backend.TimeOperation;
+import me.ac.overwork.frontend.swing_extend.ELabel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -9,8 +10,9 @@ import java.awt.*;
 @SuppressWarnings("UnnecessaryUnicodeEscape") //為了避免亂碼
 public class TimePanel extends APanelManager
 {
-	final JLabel remainTimeLabel = new JLabel("", SwingConstants.CENTER);
-	final JLabel passTimeLabel = new JLabel("", SwingConstants.CENTER);
+	private final Font numberFont = new Font(MainWindow.FONT_NAME, Font.BOLD, 48); //數字的字型
+	final JLabel remainTimeLabel = new ELabel("", SwingConstants.CENTER, numberFont);
+	final JLabel passTimeLabel = new ELabel("", SwingConstants.CENTER, numberFont);
 
 	TimePanel()
 	{
@@ -19,21 +21,17 @@ public class TimePanel extends APanelManager
 		myPanel.setBorder(new EmptyBorder(5, 10, 5, 10)); //為上下左右預留空間
 		myPanel.setBackground(Color.GREEN); //方便OBS去背
 
-		Font fixedTextFont = new Font(MainWindow.FONT_NAME, Font.PLAIN, 24); //固定文字的字型
-		Font numberFont = new Font(MainWindow.FONT_NAME, Font.BOLD, 48); //數字的字型
+		//固定文字的字型
+		Font fixedTextFont = new Font(MainWindow.FONT_NAME, Font.PLAIN, 24);
 
-		JLabel remainTimeText = new JLabel("\u5269\u9918\u6642\u9593"); //剩餘時間 文字
-		remainTimeText.setFont(fixedTextFont); //是固定文字
+		JLabel remainTimeText = new ELabel("\u5269\u9918\u6642\u9593", fixedTextFont); //剩餘時間 文字
 		myPanel.add(remainTimeText);
 
-		remainTimeLabel.setFont(numberFont); //剩餘時間 數字
 		myPanel.add(remainTimeLabel);
 
-		JLabel passTimeText = new JLabel("\u7d93\u904e\u6642\u9593"); //經過時間 文字
-		passTimeText.setFont(fixedTextFont);
+		JLabel passTimeText = new ELabel("\u7d93\u904e\u6642\u9593", fixedTextFont); //經過時間 文字
 		myPanel.add(passTimeText); //放入panel中
 
-		passTimeLabel.setFont(numberFont); //經過時間 數字
 		myPanel.add(passTimeLabel); //放入panel中
 
 		updateTimeLabel(); //更新時間數字
