@@ -152,7 +152,7 @@ public class TimeOperation
 			subtractRemainTime(); //減少剩餘時間1秒
 			addPassTime(); //增加經過時間1秒
 
-			MainWindow.instance.timePanelManager.updateTimeLabel(); //根據資料更新顯示數字
+			MainWindow.getInstance().timePanelManager.updateTimeLabel(); //根據資料更新顯示數字
 		}, 0, 1, TimeUnit.SECONDS);
 	}
 
@@ -169,7 +169,7 @@ public class TimeOperation
 	{
 		jsonCore.setTimeArray("remainTime", remainTime); //儲存到JSON
 		jsonCore.setTimeArray("passTime", passTime); //儲存到JSON
-		jsonCore.saveJSON(JSONHelper.SAVE_FILE_NAME); //寫檔
+		jsonCore.saveJSON(); //寫檔
 		pauseTimer();
 	}
 }

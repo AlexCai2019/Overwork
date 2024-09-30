@@ -73,8 +73,8 @@ public class JSONHelper
 		save.add(key, timeObject); //將物件寫入root json
 	}
 
-	void saveJSON(String fileName) throws OverworkException
+	void saveJSON() throws OverworkException
 	{
-		FileHelper.instance.writeJSONToFile(fileName, gson.toJson(save)); //將物件轉換成JSON字串寫入檔案
+		FileHelper.instance.writeJSONToFile(SAVE_FILE_NAME, gson.toJson(save)); //將物件轉換成JSON字串寫入檔案
 	}
 }

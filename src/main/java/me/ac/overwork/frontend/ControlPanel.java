@@ -109,7 +109,7 @@ public class ControlPanel extends APanelManager
 			timeOperation.setRemainTime(Integer.parseInt(remainTextFields[TimeOperation.MINUTE].getText()), TimeUnit.MINUTES);
 			timeOperation.setRemainTime(Integer.parseInt(remainTextFields[TimeOperation.SECOND].getText()), TimeUnit.SECONDS);
 
-			MainWindow.instance.timePanelManager.updateTimeLabel(); //更新新時間
+			MainWindow.getInstance().timePanelManager.updateTimeLabel(); //更新新時間
 		});
 		thirdRow.add(setButton);
 
@@ -133,7 +133,7 @@ public class ControlPanel extends APanelManager
 		add1Hour.addActionListener(event ->
 		{
 			timeOperation.addRemainTime(1, TimeUnit.HOURS);
-			MainWindow.instance.timePanelManager.updateTimeLabel();
+			MainWindow.getInstance().timePanelManager.updateTimeLabel();
 		});
 		thirdRow.add(add1Hour);
 
@@ -141,7 +141,7 @@ public class ControlPanel extends APanelManager
 		add10Minutes.addActionListener(event ->
 		{
 			timeOperation.addRemainTime(10, TimeUnit.MINUTES);
-			MainWindow.instance.timePanelManager.updateTimeLabel();
+			MainWindow.getInstance().timePanelManager.updateTimeLabel();
 		});
 		thirdRow.add(add10Minutes);
 
@@ -149,7 +149,7 @@ public class ControlPanel extends APanelManager
 		add1Minute.addActionListener(event ->
 		{
 			timeOperation.addRemainTime(1, TimeUnit.MINUTES);
-			MainWindow.instance.timePanelManager.updateTimeLabel();
+			MainWindow.getInstance().timePanelManager.updateTimeLabel();
 		});
 		thirdRow.add(add1Minute);
 
@@ -193,7 +193,7 @@ public class ControlPanel extends APanelManager
 				case TimeOperation.MINUTE -> TimeUnit.MINUTES;
 				default -> TimeUnit.SECONDS;
 			});
-			MainWindow.instance.timePanelManager.updateTimeLabel(); //更新時間顯示
+			MainWindow.getInstance().timePanelManager.updateTimeLabel(); //更新時間顯示
 		});
 		fourthRow.add(addButton);
 
@@ -210,7 +210,7 @@ public class ControlPanel extends APanelManager
 				case TimeOperation.MINUTE -> TimeUnit.MINUTES;
 				default -> TimeUnit.SECONDS;
 			});
-			MainWindow.instance.timePanelManager.updateTimeLabel(); //更新時間顯示
+			MainWindow.getInstance().timePanelManager.updateTimeLabel(); //更新時間顯示
 		});
 		fourthRow.add(subtractButton);
 
@@ -252,7 +252,7 @@ public class ControlPanel extends APanelManager
 			timeOperation.setPassTime(Integer.parseInt(passTextFields[TimeOperation.MINUTE].getText()), TimeUnit.MINUTES);
 			timeOperation.setPassTime(Integer.parseInt(passTextFields[TimeOperation.SECOND].getText()), TimeUnit.SECONDS);
 
-			MainWindow.instance.timePanelManager.updateTimeLabel(); //更新新時間
+			MainWindow.getInstance().timePanelManager.updateTimeLabel(); //更新新時間
 		});
 		seventhRow.add(setButton);
 

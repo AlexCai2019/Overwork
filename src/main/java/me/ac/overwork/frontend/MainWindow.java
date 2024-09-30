@@ -11,7 +11,18 @@ import java.net.URL;
 @SuppressWarnings("UnnecessaryUnicodeEscape") //為了避免亂碼
 public class MainWindow
 {
-	public static MainWindow instance;
+	private static MainWindow instance = null;
+
+	public static void createInstance()
+	{
+		if (instance == null)
+			instance = new MainWindow();
+	}
+
+	public static MainWindow getInstance()
+	{
+		return instance;
+	}
 
 	public final TimePanel timePanelManager;
 	public final ControlPanel controlPanelManager;
@@ -20,12 +31,12 @@ public class MainWindow
 	static final int WIDTH = 480;
 	static final int HEIGHT = 640;
 
-	public MainWindow()
+	private MainWindow()
 	{
 		//加班台倒數
 		JFrame mainWindow = new JFrame("\u52a0\u73ed\u53f0\u5012\u6578");
 		URL icon = MainWindow.class.getResource("/clock.png");
-		if (icon != null)
+		if (icon != null) //有讀到
 			mainWindow.setIconImage(new ImageIcon(icon).getImage());
 		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //按叉叉就結束
 		mainWindow.setLayout(null);
@@ -34,7 +45,7 @@ public class MainWindow
 			@Override
 			public void windowClosing(WindowEvent e)
 			{
-				BackendCore.instance.onApplicationQuit(); //後端關閉
+				BackendCore.getInstance().onApplicationQuit(); //後端關閉
 				System.exit(0); //結束
 			}
 		});

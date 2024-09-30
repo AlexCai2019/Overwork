@@ -12,6 +12,6 @@ public class APanelManager
 
 	APanelManager()
 	{
-		timeOperation = BackendCore.instance.getTimeOperation();
+		timeOperation = BackendCore.getInstance().getTimeOperation();
 	}
 }

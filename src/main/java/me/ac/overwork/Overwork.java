@@ -10,11 +10,11 @@ public class Overwork
 		try
 		{
 			//先載入後端
-			BackendCore.instance = new BackendCore(); //讓後端核心從檔案中讀取資料
+			BackendCore.createInstance(); //讓後端核心從檔案中讀取資料
 			//後載入前端
-			MainWindow.instance = new MainWindow(); //讓前端可以從後端那裡得到資料
+			MainWindow.createInstance(); //讓前端可以從後端那裡得到資料
 		}
-		catch (OverworkException exception) //有例外
+		catch (Exception exception) //有例外
 		{
 			MainWindow.messageBox(exception.getMessage()); //顯示錯誤視窗
 
