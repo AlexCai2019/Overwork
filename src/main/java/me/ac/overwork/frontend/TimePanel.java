@@ -19,7 +19,6 @@ public class TimePanel extends APanelManager
 		myPanel.setBounds(0, 0, MainWindow.WIDTH, MainWindow.HEIGHT * 3 / 10);
 		myPanel.setLayout(new GridLayout(4, 1)); //只會放4個物件
 		myPanel.setBorder(new EmptyBorder(5, 10, 5, 10)); //為上下左右預留空間
-		myPanel.setBackground(Color.GREEN); //方便OBS去背
 
 		//固定文字的字型
 		Font fixedTextFont = new Font(MainWindow.FONT_NAME, Font.PLAIN, 24);
@@ -34,7 +33,7 @@ public class TimePanel extends APanelManager
 
 		myPanel.add(passTimeLabel); //放入panel中
 
-		updateTimeLabel(); //更新時間數字
+		updateTimeLabel(); //初始化時間數字
 	}
 
 	public void updateTimeLabel()
@@ -43,7 +42,7 @@ public class TimePanel extends APanelManager
 		passTimeLabel.setText(formatTime(timeOperation.getPassTime())); //經過時間
 	}
 
-	private String formatTime(int[] time)
+	static String formatTime(int[] time)
 	{
 		return String.format("%05d:%02d:%02d", time[TimeOperation.HOUR], time[TimeOperation.MINUTE], time[TimeOperation.SECOND]);
 	}

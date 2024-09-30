@@ -1,6 +1,7 @@
 package me.ac.overwork.frontend;
 
 import me.ac.overwork.backend.BackendCore;
+import me.ac.overwork.frontend.swing_extend.ELabel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,6 +27,7 @@ public class MainWindow
 
 	public final TimePanel timePanelManager;
 	public final ControlPanel controlPanelManager;
+	public final PopOutWindow popOutWindow;
 
 	static final String FONT_NAME = "Microsoft JhengHei UI";
 	static final int WIDTH = 480;
@@ -34,18 +36,18 @@ public class MainWindow
 	private MainWindow()
 	{
 		//加班台倒數
-		JFrame mainWindow = new JFrame("\u52a0\u73ed\u53f0\u5012\u6578");
+		JFrame mainWindow = new JFrame("\u52a0\u73ed\u53f0\u5012\u6578"); //加班台倒數
 		URL icon = MainWindow.class.getResource("/clock.png");
 		if (icon != null) //有讀到
 			mainWindow.setIconImage(new ImageIcon(icon).getImage());
-		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //按叉叉就結束
 		mainWindow.setLayout(null);
-		mainWindow.addWindowListener(new WindowAdapter()
+		mainWindow.addWindowListener(new WindowAdapter() //按叉叉就結束
 		{
 			@Override
 			public void windowClosing(WindowEvent e)
 			{
 				BackendCore.getInstance().onApplicationQuit(); //後端關閉
+				popOutWindow.dispose();
 				System.exit(0); //結束
 			}
 		});
@@ -60,13 +62,14 @@ public class MainWindow
 		controlPanelManager = new ControlPanel();
 		mainWindow.add(controlPanelManager.myPanel);
 
+		//彈出式視窗
+		popOutWindow = new PopOutWindow();
+
 		mainWindow.setVisible(true);
 	}
 
 	public static void messageBox(String message)
 	{
-		JLabel errorMessage = new JLabel(message);
-		errorMessage.setFont(new Font(FONT_NAME, Font.PLAIN, 18));
-		JOptionPane.showMessageDialog(null, errorMessage, "\u932f\u8aa4", JOptionPane.ERROR_MESSAGE); //錯誤
+		JOptionPane.showMessageDialog(null, new ELabel(message, new Font(FONT_NAME, Font.PLAIN, 18)), "\u932f\u8aa4", JOptionPane.ERROR_MESSAGE); //錯誤
 	}
 }

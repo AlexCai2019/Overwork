@@ -14,10 +14,13 @@ import java.util.concurrent.TimeUnit;
 public class ControlPanel extends APanelManager
 {
 	private static final int MY_PANEL_HEIGHT = MainWindow.HEIGHT * 7 / 10;
+	private static final int TEXT_HEIGHT = MY_PANEL_HEIGHT / 10;
 	private static final int SUB_PANEL_HEIGHT = MY_PANEL_HEIGHT / 9;
+	private static final int LEFT_PADDING = 10;
 
 	private boolean isStarted = false; //是否計時中
 
+	private final Font textFont = new Font(MainWindow.FONT_NAME, Font.PLAIN, 26);
 	private final Font buttonFont = new Font(MainWindow.FONT_NAME, Font.PLAIN, 24);
 	private final Font textFieldFont = new Font(MainWindow.FONT_NAME, Font.PLAIN, 22);
 	private final JTextField[] remainTextFields = new JTextField[3]; //剩餘時間輸入框
@@ -32,19 +35,20 @@ public class ControlPanel extends APanelManager
 
 		myPanel.add(createFirstRow()); //第二列
 
-		JLabel remainTimeSet = new ELabel("\u5269\u9918\u6642\u9593\u8a2d\u5b9a", textFieldFont); //剩餘時間設定
-		remainTimeSet.setBounds(0, SUB_PANEL_HEIGHT, MainWindow.WIDTH, SUB_PANEL_HEIGHT);
+		JLabel remainTimeSet = new ELabel("\u5269\u9918\u6642\u9593\u8a2d\u5b9a", textFont); //剩餘時間設定
+		remainTimeSet.setBounds(LEFT_PADDING, SUB_PANEL_HEIGHT, MainWindow.WIDTH, TEXT_HEIGHT);
 		myPanel.add(remainTimeSet);
 
 		myPanel.add(createThirdRow()); //第三列
 		myPanel.add(createFourthRow()); //第四列
 		myPanel.add(createFifthRow()); //第五列
 
-		JLabel passedTimeSet = new ELabel("\u5df2\u904e\u6642\u9593\u8a2d\u5b9a", textFieldFont); //已過時間設定
-		passedTimeSet.setBounds(0, SUB_PANEL_HEIGHT * 5, MainWindow.WIDTH, SUB_PANEL_HEIGHT);
+		JLabel passedTimeSet = new ELabel("\u5df2\u904e\u6642\u9593\u8a2d\u5b9a", textFont); //已過時間設定
+		passedTimeSet.setBounds(LEFT_PADDING, TEXT_HEIGHT + SUB_PANEL_HEIGHT * 4, MainWindow.WIDTH, TEXT_HEIGHT);
 		myPanel.add(passedTimeSet);
 
 		myPanel.add(createSeventhRow()); //第七列
+		myPanel.add(createEighthPanel()); //第八列
 	}
 
 	private JButton createFirstRow()
@@ -77,7 +81,7 @@ public class ControlPanel extends APanelManager
 	private JPanel createThirdRow()
 	{
 		JPanel thirdRow = new JPanel(new FlowLayout(FlowLayout.LEFT)); //第三列
-		thirdRow.setBounds(0, SUB_PANEL_HEIGHT * 2, MainWindow.WIDTH, SUB_PANEL_HEIGHT);
+		thirdRow.setBounds(LEFT_PADDING, TEXT_HEIGHT + SUB_PANEL_HEIGHT, MainWindow.WIDTH, SUB_PANEL_HEIGHT);
 
 		int[] remainTime = timeOperation.getRemainTime();
 
@@ -85,19 +89,19 @@ public class ControlPanel extends APanelManager
 		hourDocument.setDocumentFilter(new TimeTextFieldFilter()); //輸入中偵測
 		thirdRow.add(remainTextFields[TimeOperation.HOUR] = createTimeTextField(hourDocument, 5, "\u5c0f\u6642")); //小時
 
-		thirdRow.add(new ELabel("\u6642", textFieldFont)); //時
+		thirdRow.add(new ELabel("\u6642", textFont)); //時
 
 		PlainDocument minuteDocument = new PlainDocument();
 		minuteDocument.setDocumentFilter(new MinuteSecondFieldFilter()); //輸入中偵測
 		thirdRow.add(remainTextFields[TimeOperation.MINUTE] = createTimeTextField(minuteDocument, 2, "\u5206\u9418")); //分鐘
 
-		thirdRow.add(new ELabel("\uu5206", textFieldFont)); //分
+		thirdRow.add(new ELabel("\uu5206", textFont)); //分
 
 		PlainDocument secondDocument = new PlainDocument();
 		secondDocument.setDocumentFilter(new MinuteSecondFieldFilter()); //輸入中偵測
 		thirdRow.add(remainTextFields[TimeOperation.SECOND] = createTimeTextField(secondDocument, 2, "\u79d2")); //秒
 
-		thirdRow.add(new ELabel("\u79d2", textFieldFont)); //秒
+		thirdRow.add(new ELabel("\u79d2", textFont)); //秒
 
 		updateRemainFields(remainTime); //根據後端資料 初始化輸入框數字
 
@@ -126,8 +130,8 @@ public class ControlPanel extends APanelManager
 
 	private JPanel createFourthRow()
 	{
-		JPanel thirdRow = new JPanel(new FlowLayout(FlowLayout.LEFT)); //第三列
-		thirdRow.setBounds(0, SUB_PANEL_HEIGHT * 3, MainWindow.WIDTH, SUB_PANEL_HEIGHT);
+		JPanel fourthRow = new JPanel(new FlowLayout(FlowLayout.LEFT)); //第三列
+		fourthRow.setBounds(LEFT_PADDING, TEXT_HEIGHT + SUB_PANEL_HEIGHT * 2, MainWindow.WIDTH, SUB_PANEL_HEIGHT);
 
 		JButton add1Hour = new EButton("+60\u5206\u9418", buttonFont, "+60\u5206\u9418"); //+60分鐘
 		add1Hour.addActionListener(event ->
@@ -135,7 +139,7 @@ public class ControlPanel extends APanelManager
 			timeOperation.addRemainTime(1, TimeUnit.HOURS);
 			MainWindow.getInstance().timePanelManager.updateTimeLabel();
 		});
-		thirdRow.add(add1Hour);
+		fourthRow.add(add1Hour);
 
 		JButton add10Minutes = new EButton("+10\u5206\u9418", buttonFont, "+10\u5206\u9418"); //+10分鐘
 		add10Minutes.addActionListener(event ->
@@ -143,7 +147,7 @@ public class ControlPanel extends APanelManager
 			timeOperation.addRemainTime(10, TimeUnit.MINUTES);
 			MainWindow.getInstance().timePanelManager.updateTimeLabel();
 		});
-		thirdRow.add(add10Minutes);
+		fourthRow.add(add10Minutes);
 
 		JButton add1Minute = new EButton("+1\u5206\u9418", buttonFont, "+1\u5206\u9418"); //+1分鐘
 		add1Minute.addActionListener(event ->
@@ -151,15 +155,15 @@ public class ControlPanel extends APanelManager
 			timeOperation.addRemainTime(1, TimeUnit.MINUTES);
 			MainWindow.getInstance().timePanelManager.updateTimeLabel();
 		});
-		thirdRow.add(add1Minute);
+		fourthRow.add(add1Minute);
 
-		return thirdRow;
+		return fourthRow;
 	}
 
 	private JPanel createFifthRow()
 	{
-		JPanel fourthRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		fourthRow.setBounds(0, SUB_PANEL_HEIGHT * 4, MainWindow.WIDTH, SUB_PANEL_HEIGHT);
+		JPanel fifthRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		fifthRow.setBounds(LEFT_PADDING, TEXT_HEIGHT + SUB_PANEL_HEIGHT * 3, MainWindow.WIDTH, SUB_PANEL_HEIGHT);
 
 		PlainDocument timeDocument = new PlainDocument();
 		timeDocument.setDocumentFilter(new TimeTextFieldFilter()); //輸入中偵測
@@ -167,7 +171,7 @@ public class ControlPanel extends APanelManager
 		JTextField timeField = new JTextField(timeDocument, "0", 5); //時間輸入框
 		timeField.setFont(textFieldFont);
 		timeField.setToolTipText("\u6642\u9593"); //時間
-		fourthRow.add(timeField);
+		fifthRow.add(timeField);
 
 		//選單
 		String[] timeSelect = new String[3];
@@ -178,7 +182,7 @@ public class ControlPanel extends APanelManager
 		unitDropDown.setFont(textFieldFont);
 		unitDropDown.setToolTipText("\u55ae\u4f4d"); //單位
 		unitDropDown.setSelectedIndex(TimeOperation.MINUTE);
-		fourthRow.add(unitDropDown);
+		fifthRow.add(unitDropDown);
 
 		//增加按鈕
 		JButton addButton = new EButton("\u589e\u52a0", buttonFont, "\u589e\u52a0"); //增加
@@ -195,7 +199,7 @@ public class ControlPanel extends APanelManager
 			});
 			MainWindow.getInstance().timePanelManager.updateTimeLabel(); //更新時間顯示
 		});
-		fourthRow.add(addButton);
+		fifthRow.add(addButton);
 
 		//減少按鈕
 		JButton subtractButton = new EButton("\u6e1b\u5c11", buttonFont, "\u6e1b\u5c11"); //減少
@@ -212,15 +216,15 @@ public class ControlPanel extends APanelManager
 			});
 			MainWindow.getInstance().timePanelManager.updateTimeLabel(); //更新時間顯示
 		});
-		fourthRow.add(subtractButton);
+		fifthRow.add(subtractButton);
 
-		return fourthRow;
+		return fifthRow;
 	}
 
 	private JPanel createSeventhRow()
 	{
 		JPanel seventhRow = new JPanel(new FlowLayout(FlowLayout.LEFT)); //第七列
-		seventhRow.setBounds(0, SUB_PANEL_HEIGHT * 6, MainWindow.WIDTH, SUB_PANEL_HEIGHT);
+		seventhRow.setBounds(LEFT_PADDING, TEXT_HEIGHT * 2 + SUB_PANEL_HEIGHT * 4, MainWindow.WIDTH, SUB_PANEL_HEIGHT);
 
 		int[] passTime = timeOperation.getPassTime();
 
@@ -228,19 +232,19 @@ public class ControlPanel extends APanelManager
 		hourDocument.setDocumentFilter(new TimeTextFieldFilter()); //輸入中偵測
 		seventhRow.add(passTextFields[TimeOperation.HOUR] = createTimeTextField(hourDocument, 5, "\u5c0f\u6642")); //小時
 
-		seventhRow.add(new ELabel("\u6642", textFieldFont)); //時
+		seventhRow.add(new ELabel("\u6642", textFont)); //時
 
 		PlainDocument minuteDocument = new PlainDocument();
 		minuteDocument.setDocumentFilter(new MinuteSecondFieldFilter()); //輸入中偵測
 		seventhRow.add(passTextFields[TimeOperation.MINUTE] = createTimeTextField(minuteDocument, 2, "\u5206\u9418")); //分鐘
 
-		seventhRow.add(new ELabel("\uu5206", textFieldFont)); //分
+		seventhRow.add(new ELabel("\uu5206", textFont)); //分
 
 		PlainDocument secondDocument = new PlainDocument();
 		secondDocument.setDocumentFilter(new MinuteSecondFieldFilter()); //輸入中偵測
 		seventhRow.add(passTextFields[TimeOperation.SECOND] = createTimeTextField(secondDocument, 2, "\u79d2")); //秒
 
-		seventhRow.add(new ELabel("\u79d2", textFieldFont)); //秒
+		seventhRow.add(new ELabel("\u79d2", textFont)); //秒
 
 		updatePassFields(passTime); //根據後端資料 初始化輸入框數字
 
@@ -257,6 +261,18 @@ public class ControlPanel extends APanelManager
 		seventhRow.add(setButton);
 
 		return seventhRow;
+	}
+
+	private JPanel createEighthPanel()
+	{
+		JPanel eighthPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		eighthPanel.setBounds(LEFT_PADDING, TEXT_HEIGHT * 2 + SUB_PANEL_HEIGHT * 5, MainWindow.WIDTH, SUB_PANEL_HEIGHT);
+
+		JButton popOutButton = new EButton("\u5f48\u51fa\u8996\u7a97", buttonFont, "\u5f48\u51fa\u8996\u7a97"); //彈出視窗
+		popOutButton.addActionListener(event -> MainWindow.getInstance().popOutWindow.setVisible());
+		eighthPanel.add(popOutButton);
+
+		return eighthPanel;
 	}
 
 	public void updateRemainFields(int[] newTime)

@@ -153,6 +153,7 @@ public class TimeOperation
 			addPassTime(); //增加經過時間1秒
 
 			MainWindow.getInstance().timePanelManager.updateTimeLabel(); //根據資料更新顯示數字
+			MainWindow.getInstance().popOutWindow.updateTimeLabel();
 		}, 0, 1, TimeUnit.SECONDS);
 	}
 
