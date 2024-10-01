@@ -146,6 +146,7 @@ public class TimeOperation
 	{
 		if (executorService != null) //已經開始了
 			return;
+
 		executorService = Executors.newSingleThreadScheduledExecutor(); //處理中控
 		everySecond = executorService.scheduleAtFixedRate(() -> //每秒執行
 		{
@@ -159,11 +160,9 @@ public class TimeOperation
 			if (mainWindow.passTimeWindow.isVisible())
 				mainWindow.passTimeWindow.updateTimeLabel(); //更新彈出式視窗已過時間
 
-			if (mainWindow.controlPanelManager.shouldWriteFile()) //該寫檔
-			{
-				FileHelper.instance.updateTimeFile("remainTime.txt", remainTime);
-				FileHelper.instance.updateTimeFile("passTime.txt", passTime);
-			}
+			//寫檔
+			FileHelper.instance.updateTimeFile("remainTime.txt", remainTime);
+			FileHelper.instance.updateTimeFile("passTime.txt", passTime);
 		}, 0, 1, TimeUnit.SECONDS);
 	}
 

@@ -31,8 +31,8 @@ public class MainWindow
 	public final PassTimeWindow passTimeWindow;
 
 	static final String FONT_NAME = "Microsoft JhengHei UI";
-	static final int WIDTH = 520;
-	static final int HEIGHT = 640;
+	static final int WIDTH = 360;
+	static final int HEIGHT = 580;
 
 	private MainWindow()
 	{

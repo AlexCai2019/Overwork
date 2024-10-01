@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 @SuppressWarnings("UnnecessaryUnicodeEscape")
 public class FileHelper
 {
-	public static final FileHelper instance = new FileHelper();
+	static final FileHelper instance = new FileHelper();
 
 	private FileHelper() {}
 
@@ -24,15 +24,15 @@ public class FileHelper
 		}
 		catch (NoSuchFileException nsfE)
 		{
-			throw new OverworkException("\u627e\u4e0d\u5230 \"" + JSONHelper.SAVE_FILE_NAME + "\" \u6a94\u6848"); //找不到 "fileName" 檔案
+			throw new OverworkException("\u627e\u4e0d\u5230 \"" + JSONHelper.SAVE_FILE_NAME + "\" \u6a94\u6848"); //找不到 "save.json" 檔案
 		}
 		catch (CharacterCodingException ccE)
 		{
 			throw new OverworkException("\u6a94\u6848\u7de8\u78bc\u7570\u5e38\uff0c\u8acb\u6aa2\u67e5\u7de8\u78bc"); //檔案編碼異常，請檢查編碼
 		}
-		catch (IOException exception)
+		catch (IOException ioE)
 		{
-			throw new OverworkException(exception);
+			throw new OverworkException(ioE);
 		}
 	}
 
@@ -52,7 +52,7 @@ public class FileHelper
 	{
 		try (FileWriter writer = new FileWriter(fileName))
 		{
-			writer.write(String.format("%05d:%02d:%02d", time[TimeOperation.HOUR], time[TimeOperation.MINUTE], time[TimeOperation.SECOND]));
+			writer.write(String.format("%d:%02d:%02d", time[TimeOperation.HOUR], time[TimeOperation.MINUTE], time[TimeOperation.SECOND]));
 		}
 		catch (IOException exception)
 		{

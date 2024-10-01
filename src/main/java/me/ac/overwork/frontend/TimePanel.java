@@ -10,18 +10,20 @@ import java.awt.*;
 @SuppressWarnings("UnnecessaryUnicodeEscape") //為了避免亂碼
 public class TimePanel extends APanelManager
 {
-	private final Font numberFont = new Font(MainWindow.FONT_NAME, Font.BOLD, 48); //數字的字型
+	static final int MY_PANEL_HEIGHT = MainWindow.HEIGHT * 2 / 10;
+
+	private final Font numberFont = new Font(MainWindow.FONT_NAME, Font.BOLD, 24); //數字的字型
 	final JLabel remainTimeLabel = new ELabel("", SwingConstants.CENTER, numberFont);
 	final JLabel passTimeLabel = new ELabel("", SwingConstants.CENTER, numberFont);
 
 	TimePanel()
 	{
-		myPanel.setBounds(0, 0, MainWindow.WIDTH, MainWindow.HEIGHT * 3 / 10);
+		myPanel.setBounds(0, 0, MainWindow.WIDTH, MY_PANEL_HEIGHT);
 		myPanel.setLayout(new GridLayout(4, 1)); //只會放4個物件
 		myPanel.setBorder(new EmptyBorder(5, 10, 5, 10)); //為上下左右預留空間
 
 		//固定文字的字型
-		Font fixedTextFont = new Font(MainWindow.FONT_NAME, Font.PLAIN, 24);
+		Font fixedTextFont = new Font(MainWindow.FONT_NAME, Font.PLAIN, 18);
 
 		JLabel remainTimeText = new ELabel("\u5269\u9918\u6642\u9593", fixedTextFont); //剩餘時間 文字
 		myPanel.add(remainTimeText);
@@ -44,6 +46,6 @@ public class TimePanel extends APanelManager
 
 	static String formatTime(int[] time)
 	{
-		return String.format("%05d:%02d:%02d", time[TimeOperation.HOUR], time[TimeOperation.MINUTE], time[TimeOperation.SECOND]);
+		return String.format("%d:%02d:%02d", time[TimeOperation.HOUR], time[TimeOperation.MINUTE], time[TimeOperation.SECOND]);
 	}
 }
