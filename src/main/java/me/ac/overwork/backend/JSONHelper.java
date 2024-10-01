@@ -58,6 +58,6 @@ public class JSONHelper
 
 	void saveJSON() throws OverworkException
 	{
-		FileHelper.instance.writeJSONToFile(SAVE_FILE_NAME, save.toString(4)); //將物件轉換成JSON字串寫入檔案
+		FileHelper.instance.writeJSONToFile(save.toString(4)); //將物件轉換成JSON字串寫入檔案
 	}
 }
