@@ -159,8 +159,11 @@ public class TimeOperation
 			if (mainWindow.passTimeWindow.isVisible())
 				mainWindow.passTimeWindow.updateTimeLabel(); //更新彈出式視窗已過時間
 
-			FileHelper.instance.updateTimeFile("remainTime.txt", remainTime);
-			FileHelper.instance.updateTimeFile("passTime.txt", passTime);
+			if (mainWindow.controlPanelManager.shouldWriteFile()) //該寫檔
+			{
+				FileHelper.instance.updateTimeFile("remainTime.txt", remainTime);
+				FileHelper.instance.updateTimeFile("passTime.txt", passTime);
+			}
 		}, 0, 1, TimeUnit.SECONDS);
 	}
 

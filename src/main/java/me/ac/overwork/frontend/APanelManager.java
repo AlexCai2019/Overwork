@@ -3,7 +3,7 @@ package me.ac.overwork.frontend;
 import me.ac.overwork.backend.BackendCore;
 import me.ac.overwork.backend.TimeOperation;
 
-import javax.swing.*;
+import javax.swing.JPanel;
 
 public class APanelManager
 {

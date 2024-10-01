@@ -8,6 +8,7 @@ import javax.swing.*;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 import java.awt.*;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("UnnecessaryUnicodeEscape") //為了避免亂碼
@@ -19,14 +20,17 @@ public class ControlPanel extends APanelManager
 	private static final int LEFT_PADDING = 10;
 
 	private boolean isStarted = false; //是否計時中
+	private boolean shouldWriteFile = false; //是否將時間寫入文字檔案
 
+	private final Color minecraftDarkGreen = new Color(0, 170, 0);
+	private final Color minecraftRed = new Color(255, 85, 85);
 	private final Font textFont = new Font(MainWindow.FONT_NAME, Font.PLAIN, 26);
 	private final Font buttonFont = new Font(MainWindow.FONT_NAME, Font.PLAIN, 24);
 	private final Font textFieldFont = new Font(MainWindow.FONT_NAME, Font.PLAIN, 22);
 	private final JTextField[] remainTextFields = new JTextField[3]; //剩餘時間輸入框
 	private final JTextField[] passTextFields = new JTextField[3]; //經過時間輸入框
-	//開始按鈕
-	private final JButton startButton = new EButton("\u958b\u59cb", buttonFont, "\u958b\u59cb\u8a08\u6642"); //開始 開始計時
+	//寫檔按鈕
+	private final JButton writeButton = new EButton("\u958b\u59cb\u5beb\u6a94", buttonFont, "\u5c07\u5269\u9918\u6642\u9593\u548c\u5df2\u904e\u6642\u9593\u8f38\u51fa\u5230\u6a94\u6848");
 
 	ControlPanel()
 	{
@@ -53,25 +57,37 @@ public class ControlPanel extends APanelManager
 
 	private JButton createFirstRow()
 	{
+		//開始按鈕
+		JButton startButton = new EButton("\u958b\u59cb", new Font(MainWindow.FONT_NAME, Font.BOLD, 28), "\u958b\u59cb\u8a08\u6642"); //開始 開始計時
+		startButton.setForeground(minecraftDarkGreen);
 		startButton.setBounds(MainWindow.WIDTH / 3, 10, MainWindow.WIDTH / 3, SUB_PANEL_HEIGHT);
 		startButton.setHorizontalAlignment(SwingConstants.CENTER);
 		startButton.addActionListener(event ->
 		{
 			if (isStarted) //已經開始了
 			{
+				//停止輸出到檔案
+				writeButton.setText("\u958b\u59cb\u5beb\u6a94"); //開始寫檔
+				writeButton.setForeground(minecraftDarkGreen);
+				shouldWriteFile = false;
+
+				//更新輸入框數字
 				updateRemainFields(timeOperation.getRemainTime()); //根據後端資料 更新輸入框數字
 				updatePassFields(timeOperation.getPassTime()); //根據後端資料 更新輸入框數字
+
 				startButton.setText("\u958b\u59cb"); //開始
 				startButton.setToolTipText("\u958b\u59cb\u8a08\u6642"); //開始計時
+				startButton.setForeground(minecraftDarkGreen);
 				timeOperation.pauseTimer();
-				isStarted = false;
+				isStarted = false; //變成暫停狀態
 			}
 			else //已經暫停了
 			{
 				startButton.setText("\u66ab\u505c"); //暫停
 				startButton.setToolTipText("\u66ab\u505c\u8a08\u6642"); //暫停計時
+				startButton.setForeground(minecraftRed);
 				timeOperation.startTimer();
-				isStarted = true; //變成開始
+				isStarted = true; //變成開始狀態
 			}
 		});
 
@@ -186,6 +202,7 @@ public class ControlPanel extends APanelManager
 
 		//增加按鈕
 		JButton addButton = new EButton("\u589e\u52a0", buttonFont, "\u589e\u52a0"); //增加
+		addButton.setForeground(minecraftDarkGreen);
 		addButton.addActionListener(event ->
 		{
 			String addString = timeField.getText(); //從時間輸入框獲得
@@ -203,6 +220,7 @@ public class ControlPanel extends APanelManager
 
 		//減少按鈕
 		JButton subtractButton = new EButton("\u6e1b\u5c11", buttonFont, "\u6e1b\u5c11"); //減少
+		subtractButton.setForeground(minecraftRed);
 		subtractButton.addActionListener(event ->
 		{
 			String subtractString = timeField.getText(); //從時間輸入框獲得
@@ -268,13 +286,40 @@ public class ControlPanel extends APanelManager
 		JPanel eighthPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		eighthPanel.setBounds(LEFT_PADDING, TEXT_HEIGHT * 2 + SUB_PANEL_HEIGHT * 5, MainWindow.WIDTH, SUB_PANEL_HEIGHT);
 
-		JButton popOutRemainButton = new EButton("\u5269\u9918\u6642\u9593\u8996\u7a97", buttonFont, "\u5f48\u51fa\u5269\u9918\u6642\u9593\u8996\u7a97"); //剩餘時間視窗 彈出剩餘時間視窗
+		JButton popOutRemainButton = new EButton("\u5269\u9918\u6642\u9593", buttonFont, "\u5f48\u51fa\u5269\u9918\u6642\u9593\u8996\u7a97"); //剩餘時間視窗 彈出剩餘時間視窗
 		popOutRemainButton.addActionListener(event -> MainWindow.getInstance().remainTimeWindow.setVisible());
 		eighthPanel.add(popOutRemainButton);
 
-		JButton popOutPassButton = new EButton("\u5df2\u904e\u6642\u9593\u8996\u7a97", buttonFont, "\u5f48\u51fa\u5df2\u904e\u6642\u9593\u8996\u7a97"); //已過時間視窗 彈出已過時間視窗
+		JButton popOutPassButton = new EButton("\u5df2\u904e\u6642\u9593", buttonFont, "\u5f48\u51fa\u5df2\u904e\u6642\u9593\u8996\u7a97"); //已過時間視窗 彈出已過時間視窗
 		popOutPassButton.addActionListener(event -> MainWindow.getInstance().passTimeWindow.setVisible());
 		eighthPanel.add(popOutPassButton);
+
+		URL linkURL = ControlPanel.class.getResource("/open.png");
+		if (linkURL != null)
+		{
+			ImageIcon imageIcon = new ImageIcon(linkURL);
+			popOutRemainButton.setIcon(imageIcon);
+			popOutPassButton.setIcon(imageIcon);
+		}
+
+		//開始寫檔 將剩餘時間和已過時間輸出到檔案
+		writeButton.setForeground(minecraftDarkGreen);
+		writeButton.addActionListener(event ->
+		{
+			if (shouldWriteFile)
+			{
+				writeButton.setText("\u958b\u59cb\u5beb\u6a94"); //開始寫檔
+				writeButton.setForeground(minecraftDarkGreen);
+				shouldWriteFile = false;
+			}
+			else
+			{
+				writeButton.setText("\u505c\u6b62\u5beb\u6a94"); //停止寫檔
+				writeButton.setForeground(minecraftRed);
+				shouldWriteFile = true;
+			}
+		});
+		eighthPanel.add(writeButton);
 
 		return eighthPanel;
 	}
@@ -293,5 +338,10 @@ public class ControlPanel extends APanelManager
 		passTextFields[TimeOperation.HOUR].setText(Integer.toString(newTime[TimeOperation.HOUR]));
 		passTextFields[TimeOperation.MINUTE].setText(Integer.toString(newTime[TimeOperation.MINUTE]));
 		passTextFields[TimeOperation.SECOND].setText(Integer.toString(newTime[TimeOperation.SECOND]));
+	}
+
+	public boolean shouldWriteFile()
+	{
+		return shouldWriteFile;
 	}
 }
