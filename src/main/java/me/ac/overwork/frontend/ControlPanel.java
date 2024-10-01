@@ -26,12 +26,12 @@ public class ControlPanel extends APanelManager
 	private final JTextField[] remainTextFields = new JTextField[3]; //剩餘時間輸入框
 	private final JTextField[] passTextFields = new JTextField[3]; //經過時間輸入框
 	//開始按鈕
-	private final JButton startButton = new EButton("\u958b\u59cb", buttonFont, "\u958b\u59cb"); //開始
+	private final JButton startButton = new EButton("\u958b\u59cb", buttonFont, "\u958b\u59cb\u8a08\u6642"); //開始 開始計時
 
 	ControlPanel()
 	{
 		myPanel.setBounds(0, MainWindow.HEIGHT * 3 / 10, MainWindow.WIDTH, MY_PANEL_HEIGHT);
-		myPanel.setLayout(null); //會放6個物件
+		myPanel.setLayout(null);
 
 		myPanel.add(createFirstRow()); //第二列
 
@@ -62,14 +62,14 @@ public class ControlPanel extends APanelManager
 				updateRemainFields(timeOperation.getRemainTime()); //根據後端資料 更新輸入框數字
 				updatePassFields(timeOperation.getPassTime()); //根據後端資料 更新輸入框數字
 				startButton.setText("\u958b\u59cb"); //開始
-				startButton.setToolTipText("\u958b\u59cb"); //開始
+				startButton.setToolTipText("\u958b\u59cb\u8a08\u6642"); //開始計時
 				timeOperation.pauseTimer();
 				isStarted = false;
 			}
 			else //已經暫停了
 			{
 				startButton.setText("\u66ab\u505c"); //暫停
-				startButton.setToolTipText("\u66ab\u505c"); //暫停
+				startButton.setToolTipText("\u66ab\u505c\u8a08\u6642"); //暫停計時
 				timeOperation.startTimer();
 				isStarted = true; //變成開始
 			}
@@ -106,7 +106,7 @@ public class ControlPanel extends APanelManager
 		updateRemainFields(remainTime); //根據後端資料 初始化輸入框數字
 
 		//設定按鈕
-		JButton setButton = new EButton("\u8a2d\u5b9a", buttonFont, "\u8a2d\u5b9a"); //設定
+		JButton setButton = new EButton("\u8a2d\u5b9a", buttonFont, "\u8a2d\u5b9a\u5269\u9918\u6642\u9593"); //設定 設定剩餘時間
 		setButton.addActionListener(event ->
 		{
 			timeOperation.setRemainTime(Integer.parseInt(remainTextFields[TimeOperation.HOUR].getText()), TimeUnit.HOURS);
@@ -133,7 +133,7 @@ public class ControlPanel extends APanelManager
 		JPanel fourthRow = new JPanel(new FlowLayout(FlowLayout.LEFT)); //第三列
 		fourthRow.setBounds(LEFT_PADDING, TEXT_HEIGHT + SUB_PANEL_HEIGHT * 2, MainWindow.WIDTH, SUB_PANEL_HEIGHT);
 
-		JButton add1Hour = new EButton("+60\u5206\u9418", buttonFont, "+60\u5206\u9418"); //+60分鐘
+		JButton add1Hour = new EButton("+60\u5206\u9418", buttonFont); //+60分鐘
 		add1Hour.addActionListener(event ->
 		{
 			timeOperation.addRemainTime(1, TimeUnit.HOURS);
@@ -141,7 +141,7 @@ public class ControlPanel extends APanelManager
 		});
 		fourthRow.add(add1Hour);
 
-		JButton add10Minutes = new EButton("+10\u5206\u9418", buttonFont, "+10\u5206\u9418"); //+10分鐘
+		JButton add10Minutes = new EButton("+10\u5206\u9418", buttonFont); //+10分鐘
 		add10Minutes.addActionListener(event ->
 		{
 			timeOperation.addRemainTime(10, TimeUnit.MINUTES);
@@ -149,7 +149,7 @@ public class ControlPanel extends APanelManager
 		});
 		fourthRow.add(add10Minutes);
 
-		JButton add1Minute = new EButton("+1\u5206\u9418", buttonFont, "+1\u5206\u9418"); //+1分鐘
+		JButton add1Minute = new EButton("+1\u5206\u9418", buttonFont); //+1分鐘
 		add1Minute.addActionListener(event ->
 		{
 			timeOperation.addRemainTime(1, TimeUnit.MINUTES);
@@ -168,9 +168,9 @@ public class ControlPanel extends APanelManager
 		PlainDocument timeDocument = new PlainDocument();
 		timeDocument.setDocumentFilter(new TimeTextFieldFilter()); //輸入中偵測
 
-		JTextField timeField = new JTextField(timeDocument, "0", 5); //時間輸入框
-		timeField.setFont(textFieldFont);
-		timeField.setToolTipText("\u6642\u9593"); //時間
+		//時間輸入框
+		JTextField timeField = createTimeTextField(timeDocument, 5, "\u6642\u9593"); //時間
+		timeField.setText("0");
 		fifthRow.add(timeField);
 
 		//選單
@@ -178,17 +178,17 @@ public class ControlPanel extends APanelManager
 		timeSelect[TimeOperation.HOUR] = "\u5c0f\u6642"; //小時
 		timeSelect[TimeOperation.MINUTE] = "\u5206\u9418"; //分鐘
 		timeSelect[TimeOperation.SECOND] = "\u79d2"; //秒
-		JComboBox<String> unitDropDown = new JComboBox<>(timeSelect);
+		JComboBox<String> unitDropDown = new JComboBox<>(timeSelect); //下拉式選單
 		unitDropDown.setFont(textFieldFont);
 		unitDropDown.setToolTipText("\u55ae\u4f4d"); //單位
-		unitDropDown.setSelectedIndex(TimeOperation.MINUTE);
+		unitDropDown.setSelectedIndex(TimeOperation.MINUTE); //選擇分鐘
 		fifthRow.add(unitDropDown);
 
 		//增加按鈕
 		JButton addButton = new EButton("\u589e\u52a0", buttonFont, "\u589e\u52a0"); //增加
 		addButton.addActionListener(event ->
 		{
-			String addString = timeField.getText();
+			String addString = timeField.getText(); //從時間輸入框獲得
 			if (addString == null || addString.isEmpty())
 				return;
 			timeOperation.addRemainTime(Integer.parseInt(addString), switch (unitDropDown.getSelectedIndex())
@@ -205,7 +205,7 @@ public class ControlPanel extends APanelManager
 		JButton subtractButton = new EButton("\u6e1b\u5c11", buttonFont, "\u6e1b\u5c11"); //減少
 		subtractButton.addActionListener(event ->
 		{
-			String subtractString = timeField.getText();
+			String subtractString = timeField.getText(); //從時間輸入框獲得
 			if (subtractString == null || subtractString.isEmpty())
 				return;
 			timeOperation.subtractRemainTime(Integer.parseInt(subtractString), switch (unitDropDown.getSelectedIndex())
@@ -249,7 +249,7 @@ public class ControlPanel extends APanelManager
 		updatePassFields(passTime); //根據後端資料 初始化輸入框數字
 
 		//設定按鈕
-		JButton setButton = new EButton("\u8a2d\u5b9a", buttonFont, "\u8a2d\u5b9a"); //設定
+		JButton setButton = new EButton("\u8a2d\u5b9a", buttonFont, "\u8a2d\u5b9a\u5df2\u904e\u6642\u9593"); //設定 設定已過時間
 		setButton.addActionListener(event ->
 		{
 			timeOperation.setPassTime(Integer.parseInt(passTextFields[TimeOperation.HOUR].getText()), TimeUnit.HOURS);
@@ -268,14 +268,18 @@ public class ControlPanel extends APanelManager
 		JPanel eighthPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		eighthPanel.setBounds(LEFT_PADDING, TEXT_HEIGHT * 2 + SUB_PANEL_HEIGHT * 5, MainWindow.WIDTH, SUB_PANEL_HEIGHT);
 
-		JButton popOutButton = new EButton("\u5f48\u51fa\u8996\u7a97", buttonFont, "\u5f48\u51fa\u8996\u7a97"); //彈出視窗
-		popOutButton.addActionListener(event -> MainWindow.getInstance().popOutWindow.setVisible());
-		eighthPanel.add(popOutButton);
+		JButton popOutRemainButton = new EButton("\u5269\u9918\u6642\u9593\u8996\u7a97", buttonFont, "\u5f48\u51fa\u5269\u9918\u6642\u9593\u8996\u7a97"); //剩餘時間視窗 彈出剩餘時間視窗
+		popOutRemainButton.addActionListener(event -> MainWindow.getInstance().remainTimeWindow.setVisible());
+		eighthPanel.add(popOutRemainButton);
+
+		JButton popOutPassButton = new EButton("\u5df2\u904e\u6642\u9593\u8996\u7a97", buttonFont, "\u5f48\u51fa\u5df2\u904e\u6642\u9593\u8996\u7a97"); //已過時間視窗 彈出已過時間視窗
+		popOutPassButton.addActionListener(event -> MainWindow.getInstance().passTimeWindow.setVisible());
+		eighthPanel.add(popOutPassButton);
 
 		return eighthPanel;
 	}
 
-	public void updateRemainFields(int[] newTime)
+	private void updateRemainFields(int[] newTime)
 	{
 		//從後端獲得更新
 		remainTextFields[TimeOperation.HOUR].setText(Integer.toString(newTime[TimeOperation.HOUR]));
@@ -283,7 +287,7 @@ public class ControlPanel extends APanelManager
 		remainTextFields[TimeOperation.SECOND].setText(Integer.toString(newTime[TimeOperation.SECOND]));
 	}
 
-	public void updatePassFields(int[] newTime)
+	private void updatePassFields(int[] newTime)
 	{
 		//從後端獲得更新
 		passTextFields[TimeOperation.HOUR].setText(Integer.toString(newTime[TimeOperation.HOUR]));

@@ -27,7 +27,8 @@ public class MainWindow
 
 	public final TimePanel timePanelManager;
 	public final ControlPanel controlPanelManager;
-	public final PopOutWindow popOutWindow;
+	public final RemainTimeWindow remainTimeWindow;
+	public final PassTimeWindow passTimeWindow;
 
 	static final String FONT_NAME = "Microsoft JhengHei UI";
 	static final int WIDTH = 480;
@@ -47,7 +48,8 @@ public class MainWindow
 			public void windowClosing(WindowEvent e)
 			{
 				BackendCore.getInstance().onApplicationQuit(); //後端關閉
-				popOutWindow.dispose();
+				remainTimeWindow.dispose();
+				passTimeWindow.dispose();
 				System.exit(0); //結束
 			}
 		});
@@ -63,7 +65,8 @@ public class MainWindow
 		mainWindow.add(controlPanelManager.myPanel);
 
 		//彈出式視窗
-		popOutWindow = new PopOutWindow();
+		remainTimeWindow = new RemainTimeWindow();
+		passTimeWindow = new PassTimeWindow();
 
 		mainWindow.setVisible(true);
 	}

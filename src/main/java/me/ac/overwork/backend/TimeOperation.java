@@ -152,8 +152,15 @@ public class TimeOperation
 			subtractRemainTime(); //減少剩餘時間1秒
 			addPassTime(); //增加經過時間1秒
 
-			MainWindow.getInstance().timePanelManager.updateTimeLabel(); //根據資料更新顯示數字
-			MainWindow.getInstance().popOutWindow.updateTimeLabel();
+			MainWindow mainWindow = MainWindow.getInstance();
+			mainWindow.timePanelManager.updateTimeLabel(); //根據資料更新顯示數字
+			if (mainWindow.remainTimeWindow.isVisible())
+				mainWindow.remainTimeWindow.updateTimeLabel(); //更新彈出式視窗剩餘時間
+			if (mainWindow.passTimeWindow.isVisible())
+				mainWindow.passTimeWindow.updateTimeLabel(); //更新彈出式視窗已過時間
+
+			FileHelper.instance.updateTimeFile("remainTime.txt", remainTime);
+			FileHelper.instance.updateTimeFile("passTime.txt", passTime);
 		}, 0, 1, TimeUnit.SECONDS);
 	}
 
