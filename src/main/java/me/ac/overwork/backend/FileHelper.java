@@ -16,15 +16,15 @@ public class FileHelper
 
 	private FileHelper() {}
 
-	String readJSONFromFile(String fileName) throws OverworkException
+	String readJSONFromFile() throws OverworkException
 	{
 		try
 		{
-			return Files.readString(Paths.get(fileName)); //讀取json
+			return Files.readString(Paths.get(JSONHelper.SAVE_FILE_NAME)); //讀取json
 		}
 		catch (NoSuchFileException nsfE)
 		{
-			throw new OverworkException("\u627e\u4e0d\u5230 \"" + fileName + "\" \u6a94\u6848"); //找不到 "fileName" 檔案
+			throw new OverworkException("\u627e\u4e0d\u5230 \"" + JSONHelper.SAVE_FILE_NAME + "\" \u6a94\u6848"); //找不到 "fileName" 檔案
 		}
 		catch (CharacterCodingException ccE)
 		{
