@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings("UnnecessaryUnicodeEscape") //為了避免亂碼
 public class ControlPanel extends PanelParent
 {
-	private static final int MY_PANEL_HEIGHT = MainWindow.HEIGHT - TimePanel.MY_PANEL_HEIGHT;
+	static final int MY_PANEL_HEIGHT = MainWindow.HEIGHT - TimePanel.MY_PANEL_HEIGHT;
 	private static final int BIG_GAP = MY_PANEL_HEIGHT / 20;
 	private static final int SUB_PANEL_HEIGHT = MY_PANEL_HEIGHT / 11;
 	private static final int LEFT_PADDING = 10;
@@ -33,7 +33,7 @@ public class ControlPanel extends PanelParent
 
 	ControlPanel()
 	{
-		myPanel.setBounds(0, TimePanel.MY_PANEL_HEIGHT, MainWindow.WIDTH, MY_PANEL_HEIGHT);
+		myPanel.setBounds(0, 0, MainWindow.WIDTH, MY_PANEL_HEIGHT);
 
 		myPanel.add(createFirstRow()); //第一列
 
@@ -125,7 +125,7 @@ public class ControlPanel extends PanelParent
 			timeOperation.setRemainTime(Integer.parseInt(remainTextFields[TimeOperation.MINUTE].getText()), TimeUnit.MINUTES);
 			timeOperation.setRemainTime(Integer.parseInt(remainTextFields[TimeOperation.SECOND].getText()), TimeUnit.SECONDS);
 
-			MainTab.getInstance().timePanelManager.updateTimeLabel(); //更新新時間
+			MainWindow.getInstance().timePanelManager.updateTimeLabel(); //更新新時間
 		});
 		thirdRow.add(setRemainButton);
 
@@ -141,7 +141,7 @@ public class ControlPanel extends PanelParent
 		add1Hour.addActionListener(event ->
 		{
 			timeOperation.addRemainTime(1, TimeUnit.HOURS);
-			MainTab.getInstance().timePanelManager.updateTimeLabel();
+			MainWindow.getInstance().timePanelManager.updateTimeLabel();
 		});
 		fourthRow.add(add1Hour);
 
@@ -149,7 +149,7 @@ public class ControlPanel extends PanelParent
 		add10Minutes.addActionListener(event ->
 		{
 			timeOperation.addRemainTime(10, TimeUnit.MINUTES);
-			MainTab.getInstance().timePanelManager.updateTimeLabel();
+			MainWindow.getInstance().timePanelManager.updateTimeLabel();
 		});
 		fourthRow.add(add10Minutes);
 
@@ -157,7 +157,7 @@ public class ControlPanel extends PanelParent
 		add1Minute.addActionListener(event ->
 		{
 			timeOperation.addRemainTime(1, TimeUnit.MINUTES);
-			MainTab.getInstance().timePanelManager.updateTimeLabel();
+			MainWindow.getInstance().timePanelManager.updateTimeLabel();
 		});
 		fourthRow.add(add1Minute);
 
@@ -201,7 +201,7 @@ public class ControlPanel extends PanelParent
 				case TimeOperation.MINUTE -> TimeUnit.MINUTES;
 				default -> TimeUnit.SECONDS;
 			});
-			MainTab.getInstance().timePanelManager.updateTimeLabel(); //更新時間顯示
+			MainWindow.getInstance().timePanelManager.updateTimeLabel(); //更新時間顯示
 		});
 		fifthRow.add(addButton);
 
@@ -219,7 +219,7 @@ public class ControlPanel extends PanelParent
 				case TimeOperation.MINUTE -> TimeUnit.MINUTES;
 				default -> TimeUnit.SECONDS;
 			});
-			MainTab.getInstance().timePanelManager.updateTimeLabel(); //更新時間顯示
+			MainWindow.getInstance().timePanelManager.updateTimeLabel(); //更新時間顯示
 		});
 		fifthRow.add(subtractButton);
 
@@ -260,7 +260,7 @@ public class ControlPanel extends PanelParent
 			timeOperation.setPassTime(Integer.parseInt(passTextFields[TimeOperation.MINUTE].getText()), TimeUnit.MINUTES);
 			timeOperation.setPassTime(Integer.parseInt(passTextFields[TimeOperation.SECOND].getText()), TimeUnit.SECONDS);
 
-			MainTab.getInstance().timePanelManager.updateTimeLabel(); //更新新時間
+			MainWindow.getInstance().timePanelManager.updateTimeLabel(); //更新新時間
 		});
 		seventhRow.add(setPassButton);
 

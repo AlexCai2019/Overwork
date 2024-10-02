@@ -28,6 +28,10 @@ public class MainWindow
 	public final RemainTimeWindow remainTimeWindow;
 	public final PassTimeWindow passTimeWindow;
 
+	public final TimePanel timePanelManager;
+	public final ControlPanel controlPanelManager;
+	public final SettingPanel settingPanelManager;
+
 	static final String FONT_NAME = "Microsoft JhengHei UI";
 	static final int WIDTH = 360;
 	static final int HEIGHT = 580;
@@ -50,14 +54,24 @@ public class MainWindow
 				System.exit(0); //結束
 			}
 		});
+		mainWindow.setLayout(null);
 		mainWindow.setBounds(0, 0, WIDTH, HEIGHT);
 		mainWindow.setResizable(false);
 
+		//時間介面
+		timePanelManager = new TimePanel(); //現在才創 為了給載入JSON留時間
+		mainWindow.add(timePanelManager.myPanel);
+
 		JTabbedPane tabbedPane = new JTabbedPane(SwingConstants.TOP);
 		tabbedPane.setFont(new Font(MainWindow.FONT_NAME, Font.PLAIN, 12));
+		tabbedPane.setBounds(0, TimePanel.MY_PANEL_HEIGHT, MainWindow.WIDTH, ControlPanel.MY_PANEL_HEIGHT);
 
-		tabbedPane.addTab(MainTab.getInstance().tabName, MainTab.getInstance().tabPanel); //計時器分頁
-		tabbedPane.addTab(SettingTab.getInstance().tabName, SettingTab.getInstance().tabPanel); //設定分頁
+		controlPanelManager = new ControlPanel();
+		tabbedPane.addTab("\u8a08\u6642\u5668", controlPanelManager.myPanel); //計時器
+
+		settingPanelManager = new SettingPanel();
+		tabbedPane.addTab("\u8a2d\u5b9a", settingPanelManager.myPanel); //設定
+
 		mainWindow.add(tabbedPane);
 
 		//彈出式視窗

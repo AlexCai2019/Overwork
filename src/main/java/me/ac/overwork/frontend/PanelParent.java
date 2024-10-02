@@ -15,15 +15,3 @@ class PanelParent
 		timeOperation = BackendCore.getInstance().getTimeOperation();
 	}
 }
-
-class TabParent
-{
-	protected final JPanel tabPanel = new JPanel(null);
-
-	protected final String tabName;
-
-	TabParent(String tabName)
-	{
-		this.tabName = tabName;
-	}
-}
