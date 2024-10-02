@@ -3,16 +3,16 @@ package me.ac.overwork.frontend;
 import me.ac.overwork.backend.TimeOperation;
 import me.ac.overwork.frontend.swing_extend.EButton;
 import me.ac.overwork.frontend.swing_extend.ELabel;
+import me.ac.overwork.frontend.swing_extend.ETextField;
 
 import javax.swing.*;
-import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 import java.awt.*;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("UnnecessaryUnicodeEscape") //為了避免亂碼
-public class ControlPanel extends APanelManager
+public class ControlPanel extends PanelParent
 {
 	private static final int MY_PANEL_HEIGHT = MainWindow.HEIGHT - TimePanel.MY_PANEL_HEIGHT;
 	private static final int BIG_GAP = MY_PANEL_HEIGHT / 20;
@@ -34,7 +34,6 @@ public class ControlPanel extends APanelManager
 	ControlPanel()
 	{
 		myPanel.setBounds(0, TimePanel.MY_PANEL_HEIGHT, MainWindow.WIDTH, MY_PANEL_HEIGHT);
-		myPanel.setLayout(null);
 
 		myPanel.add(createFirstRow()); //第一列
 
@@ -70,8 +69,8 @@ public class ControlPanel extends APanelManager
 			if (isStarted) //已經開始了
 			{
 				//更新輸入框數字
-				updateRemainFields(timeOperation.getRemainTime()); //根據後端資料 更新輸入框數字
-				updatePassFields(timeOperation.getPassTime()); //根據後端資料 更新輸入框數字
+				updateTimeFields(remainTextFields, timeOperation.getRemainTime()); //根據後端資料 更新輸入框數字
+				updateTimeFields(passTextFields, timeOperation.getPassTime()); //根據後端資料 更新輸入框數字
 
 				startButton.setText("\u958b\u59cb"); //開始
 				startButton.setToolTipText("\u958b\u59cb\u8a08\u6642"); //開始計時
@@ -100,24 +99,24 @@ public class ControlPanel extends APanelManager
 		int[] remainTime = timeOperation.getRemainTime();
 
 		PlainDocument hourDocument = new PlainDocument();
-		hourDocument.setDocumentFilter(new TimeTextFieldFilter()); //輸入中偵測
-		thirdRow.add(remainTextFields[TimeOperation.HOUR] = createTimeTextField(hourDocument, 5, "\u5c0f\u6642")); //小時
+		hourDocument.setDocumentFilter(new HourTextFieldFilter()); //輸入中偵測
+		thirdRow.add(remainTextFields[TimeOperation.HOUR] = new ETextField(hourDocument, 5, null, textFieldFont, "\u5c0f\u6642")); //小時
 
 		thirdRow.add(new ELabel("\u6642", textFont)); //時
 
 		PlainDocument minuteDocument = new PlainDocument();
 		minuteDocument.setDocumentFilter(new MinuteSecondFieldFilter()); //輸入中偵測
-		thirdRow.add(remainTextFields[TimeOperation.MINUTE] = createTimeTextField(minuteDocument, 2, "\u5206\u9418")); //分鐘
+		thirdRow.add(remainTextFields[TimeOperation.MINUTE] = new ETextField(minuteDocument, 2, null, textFieldFont, "\u5206\u9418")); //分鐘
 
 		thirdRow.add(new ELabel("\uu5206", textFont)); //分
 
 		PlainDocument secondDocument = new PlainDocument();
 		secondDocument.setDocumentFilter(new MinuteSecondFieldFilter()); //輸入中偵測
-		thirdRow.add(remainTextFields[TimeOperation.SECOND] = createTimeTextField(secondDocument, 2, "\u79d2")); //秒
+		thirdRow.add(remainTextFields[TimeOperation.SECOND] = new ETextField(secondDocument, 2, null, textFieldFont, "\u79d2")); //秒
 
 		thirdRow.add(new ELabel("\u79d2", textFont)); //秒
 
-		updateRemainFields(remainTime); //根據後端資料 初始化輸入框數字
+		updateTimeFields(remainTextFields, remainTime); //根據後端資料 初始化輸入框數字
 
 		//設定按鈕
 		setRemainButton.addActionListener(event ->
@@ -126,19 +125,11 @@ public class ControlPanel extends APanelManager
 			timeOperation.setRemainTime(Integer.parseInt(remainTextFields[TimeOperation.MINUTE].getText()), TimeUnit.MINUTES);
 			timeOperation.setRemainTime(Integer.parseInt(remainTextFields[TimeOperation.SECOND].getText()), TimeUnit.SECONDS);
 
-			MainWindow.getInstance().timePanelManager.updateTimeLabel(); //更新新時間
+			MainTab.getInstance().timePanelManager.updateTimeLabel(); //更新新時間
 		});
 		thirdRow.add(setRemainButton);
 
 		return thirdRow;
-	}
-
-	private JTextField createTimeTextField(Document document, int columns, String toolTip)
-	{
-		JTextField remainTextField = new JTextField(document, null, columns);
-		remainTextField.setFont(textFieldFont);
-		remainTextField.setToolTipText(toolTip);
-		return remainTextField;
 	}
 
 	private JPanel createFourthRow()
@@ -150,7 +141,7 @@ public class ControlPanel extends APanelManager
 		add1Hour.addActionListener(event ->
 		{
 			timeOperation.addRemainTime(1, TimeUnit.HOURS);
-			MainWindow.getInstance().timePanelManager.updateTimeLabel();
+			MainTab.getInstance().timePanelManager.updateTimeLabel();
 		});
 		fourthRow.add(add1Hour);
 
@@ -158,7 +149,7 @@ public class ControlPanel extends APanelManager
 		add10Minutes.addActionListener(event ->
 		{
 			timeOperation.addRemainTime(10, TimeUnit.MINUTES);
-			MainWindow.getInstance().timePanelManager.updateTimeLabel();
+			MainTab.getInstance().timePanelManager.updateTimeLabel();
 		});
 		fourthRow.add(add10Minutes);
 
@@ -166,7 +157,7 @@ public class ControlPanel extends APanelManager
 		add1Minute.addActionListener(event ->
 		{
 			timeOperation.addRemainTime(1, TimeUnit.MINUTES);
-			MainWindow.getInstance().timePanelManager.updateTimeLabel();
+			MainTab.getInstance().timePanelManager.updateTimeLabel();
 		});
 		fourthRow.add(add1Minute);
 
@@ -179,12 +170,11 @@ public class ControlPanel extends APanelManager
 		fifthRow.setBounds(LEFT_PADDING, BIG_GAP + SUB_PANEL_HEIGHT * 4, MainWindow.WIDTH, SUB_PANEL_HEIGHT);
 
 		PlainDocument timeDocument = new PlainDocument();
-		timeDocument.setDocumentFilter(new TimeTextFieldFilter()); //輸入中偵測
+		timeDocument.setDocumentFilter(new HourTextFieldFilter()); //輸入中偵測
 
 		//時間輸入框
-		JTextField timeField = createTimeTextField(timeDocument, 5, "\u6642\u9593"); //時間
-		timeField.setText("0");
-		fifthRow.add(timeField);
+		JTextField timeField = new ETextField(timeDocument, 5, "0", textFieldFont, "\u6642\u9593"); //時間
+		fifthRow.add(timeField); //不可以縮減 下面lambda要用
 
 		//選單
 		String[] timeSelect = new String[3];
@@ -211,7 +201,7 @@ public class ControlPanel extends APanelManager
 				case TimeOperation.MINUTE -> TimeUnit.MINUTES;
 				default -> TimeUnit.SECONDS;
 			});
-			MainWindow.getInstance().timePanelManager.updateTimeLabel(); //更新時間顯示
+			MainTab.getInstance().timePanelManager.updateTimeLabel(); //更新時間顯示
 		});
 		fifthRow.add(addButton);
 
@@ -229,7 +219,7 @@ public class ControlPanel extends APanelManager
 				case TimeOperation.MINUTE -> TimeUnit.MINUTES;
 				default -> TimeUnit.SECONDS;
 			});
-			MainWindow.getInstance().timePanelManager.updateTimeLabel(); //更新時間顯示
+			MainTab.getInstance().timePanelManager.updateTimeLabel(); //更新時間顯示
 		});
 		fifthRow.add(subtractButton);
 
@@ -244,24 +234,24 @@ public class ControlPanel extends APanelManager
 		int[] passTime = timeOperation.getPassTime();
 
 		PlainDocument hourDocument = new PlainDocument();
-		hourDocument.setDocumentFilter(new TimeTextFieldFilter()); //輸入中偵測
-		seventhRow.add(passTextFields[TimeOperation.HOUR] = createTimeTextField(hourDocument, 5, "\u5c0f\u6642")); //小時
+		hourDocument.setDocumentFilter(new HourTextFieldFilter()); //輸入中偵測
+		seventhRow.add(passTextFields[TimeOperation.HOUR] = new ETextField(hourDocument, 5, null, textFieldFont, "\u5c0f\u6642")); //小時
 
 		seventhRow.add(new ELabel("\u6642", textFont)); //時
 
 		PlainDocument minuteDocument = new PlainDocument();
 		minuteDocument.setDocumentFilter(new MinuteSecondFieldFilter()); //輸入中偵測
-		seventhRow.add(passTextFields[TimeOperation.MINUTE] = createTimeTextField(minuteDocument, 2, "\u5206\u9418")); //分鐘
+		seventhRow.add(passTextFields[TimeOperation.MINUTE] = new ETextField(minuteDocument, 2, null, textFieldFont, "\u5206\u9418")); //分鐘
 
 		seventhRow.add(new ELabel("\uu5206", textFont)); //分
 
 		PlainDocument secondDocument = new PlainDocument();
 		secondDocument.setDocumentFilter(new MinuteSecondFieldFilter()); //輸入中偵測
-		seventhRow.add(passTextFields[TimeOperation.SECOND] = createTimeTextField(secondDocument, 2, "\u79d2")); //秒
+		seventhRow.add(passTextFields[TimeOperation.SECOND] = new ETextField(secondDocument, 2, null, textFieldFont, "\u79d2")); //秒
 
 		seventhRow.add(new ELabel("\u79d2", textFont)); //秒
 
-		updatePassFields(passTime); //根據後端資料 初始化輸入框數字
+		updateTimeFields(passTextFields, passTime); //根據後端資料 初始化輸入框數字
 
 		//設定按鈕
 		setPassButton.addActionListener(event ->
@@ -270,7 +260,7 @@ public class ControlPanel extends APanelManager
 			timeOperation.setPassTime(Integer.parseInt(passTextFields[TimeOperation.MINUTE].getText()), TimeUnit.MINUTES);
 			timeOperation.setPassTime(Integer.parseInt(passTextFields[TimeOperation.SECOND].getText()), TimeUnit.SECONDS);
 
-			MainWindow.getInstance().timePanelManager.updateTimeLabel(); //更新新時間
+			MainTab.getInstance().timePanelManager.updateTimeLabel(); //更新新時間
 		});
 		seventhRow.add(setPassButton);
 
@@ -301,19 +291,11 @@ public class ControlPanel extends APanelManager
 		return eighthPanel;
 	}
 
-	private void updateRemainFields(int[] newTime)
+	private static void updateTimeFields(JTextField[] timeTextFields, int[] newTime)
 	{
 		//從後端獲得更新
-		remainTextFields[TimeOperation.HOUR].setText(Integer.toString(newTime[TimeOperation.HOUR]));
-		remainTextFields[TimeOperation.MINUTE].setText(Integer.toString(newTime[TimeOperation.MINUTE]));
-		remainTextFields[TimeOperation.SECOND].setText(Integer.toString(newTime[TimeOperation.SECOND]));
-	}
-
-	private void updatePassFields(int[] newTime)
-	{
-		//從後端獲得更新
-		passTextFields[TimeOperation.HOUR].setText(Integer.toString(newTime[TimeOperation.HOUR]));
-		passTextFields[TimeOperation.MINUTE].setText(Integer.toString(newTime[TimeOperation.MINUTE]));
-		passTextFields[TimeOperation.SECOND].setText(Integer.toString(newTime[TimeOperation.SECOND]));
+		timeTextFields[TimeOperation.HOUR].setText(Integer.toString(newTime[TimeOperation.HOUR]));
+		timeTextFields[TimeOperation.MINUTE].setText(Integer.toString(newTime[TimeOperation.MINUTE]));
+		timeTextFields[TimeOperation.SECOND].setText(Integer.toString(newTime[TimeOperation.SECOND]));
 	}
 }

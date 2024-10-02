@@ -8,7 +8,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 @SuppressWarnings("UnnecessaryUnicodeEscape") //為了避免亂碼
-public class TimePanel extends APanelManager
+public class TimePanel extends PanelParent
 {
 	static final int MY_PANEL_HEIGHT = MainWindow.HEIGHT * 2 / 10;
 

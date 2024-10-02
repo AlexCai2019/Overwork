@@ -6,18 +6,18 @@ import javax.swing.text.Document;
 import javax.swing.text.DocumentFilter;
 import java.util.regex.Pattern;
 
-sealed class TimeTextFieldFilter extends DocumentFilter permits MinuteSecondFieldFilter
+sealed class TextFieldFilter extends DocumentFilter permits HourTextFieldFilter, MinuteSecondFieldFilter, ColorFieldFilter
 {
-	private final Pattern numbersRegex;
+	protected final Pattern regex; //要檢查的正規表示式
 
-	TimeTextFieldFilter()
+	protected TextFieldFilter(String regexString)
 	{
-		numbersRegex = Pattern.compile("\\d{0,5}");
+		regex = Pattern.compile(regexString);
 	}
 
-	TimeTextFieldFilter(int length)
+	protected boolean isValid(String content)
 	{
-		numbersRegex = Pattern.compile("\\d{0," + length + '}');
+		return regex.matcher(content).matches();
 	}
 
 	@Override
@@ -55,23 +55,28 @@ sealed class TimeTextFieldFilter extends DocumentFilter permits MinuteSecondFiel
 		if (isValid(content)) //是數字 通過
 			super.remove(fb, offset, length);
 	}
+}
 
-	protected boolean isValid(String content)
+final class HourTextFieldFilter extends TextFieldFilter
+{
+	HourTextFieldFilter()
 	{
-		return numbersRegex.matcher(content).matches();
+		super("\\d{0,5}"); //0到5個數字
 	}
 }
 
-final class MinuteSecondFieldFilter extends TimeTextFieldFilter
+final class MinuteSecondFieldFilter extends TextFieldFilter
 {
 	MinuteSecondFieldFilter()
 	{
-		super(2); //分鐘和秒最高二位數
+		super("([0-5]?\\d)?"); //空字串 或0~59
 	}
+}
 
-	@Override
-	protected boolean isValid(String content)
+final class ColorFieldFilter extends TextFieldFilter
+{
+	ColorFieldFilter()
 	{
-		return super.isValid(content) && (content.length() <= 1 || content.charAt(0) < '6'); //是數字或空 且小於60
+		super("#[0-9A-Fa-f]{0,6}"); //以#開頭 0到6個hex數字
 	}
 }

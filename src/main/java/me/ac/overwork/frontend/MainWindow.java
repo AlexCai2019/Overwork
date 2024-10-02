@@ -25,8 +25,6 @@ public class MainWindow
 		return instance;
 	}
 
-	public final TimePanel timePanelManager;
-	public final ControlPanel controlPanelManager;
 	public final RemainTimeWindow remainTimeWindow;
 	public final PassTimeWindow passTimeWindow;
 
@@ -41,7 +39,6 @@ public class MainWindow
 		URL icon = MainWindow.class.getResource("/clock.png");
 		if (icon != null) //有讀到
 			mainWindow.setIconImage(new ImageIcon(icon).getImage());
-		mainWindow.setLayout(null);
 		mainWindow.addWindowListener(new WindowAdapter() //按叉叉就結束
 		{
 			@Override
@@ -56,13 +53,12 @@ public class MainWindow
 		mainWindow.setBounds(0, 0, WIDTH, HEIGHT);
 		mainWindow.setResizable(false);
 
-		//時間介面
-		timePanelManager = new TimePanel(); //現在才創 為了給載入JSON留時間
-		mainWindow.add(timePanelManager.myPanel);
+		JTabbedPane tabbedPane = new JTabbedPane(SwingConstants.TOP);
+		tabbedPane.setFont(new Font(MainWindow.FONT_NAME, Font.PLAIN, 12));
 
-		//操作介面
-		controlPanelManager = new ControlPanel();
-		mainWindow.add(controlPanelManager.myPanel);
+		tabbedPane.addTab(MainTab.getInstance().tabName, MainTab.getInstance().tabPanel); //計時器分頁
+		tabbedPane.addTab(SettingTab.getInstance().tabName, SettingTab.getInstance().tabPanel); //設定分頁
+		mainWindow.add(tabbedPane);
 
 		//彈出式視窗
 		remainTimeWindow = new RemainTimeWindow();
