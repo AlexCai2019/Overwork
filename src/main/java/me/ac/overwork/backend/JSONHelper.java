@@ -7,11 +7,24 @@ import org.json.JSONObject;
 @SuppressWarnings("UnnecessaryUnicodeEscape")
 public class JSONHelper
 {
+	private static JSONHelper instance;
+
+	static void createInstance() throws OverworkException
+	{
+		if (instance == null)
+			instance = new JSONHelper();
+	}
+
+	public static JSONHelper getInstance()
+	{
+		return instance;
+	}
+
 	static final String SAVE_FILE_NAME = "save.json";
 
 	private final JSONObject save;
 
-	JSONHelper() throws OverworkException
+	private JSONHelper() throws OverworkException
 	{
 		try
 		{
@@ -39,7 +52,7 @@ public class JSONHelper
 			timeArray[TimeOperation.MINUTE] = timeObject.getInt("minute"); //分鐘
 			timeArray[TimeOperation.SECOND] = timeObject.getInt("second"); //秒
 		}
-		catch (JSONException exception) //不是JsonPrimitive 或 不是數字字串
+		catch (JSONException exception) //不是int 或 不是數字字串
 		{
 			throw new OverworkException(key + " \u683c\u5f0f\u932f\u8aa4"); //格式錯誤
 		}
@@ -59,5 +72,20 @@ public class JSONHelper
 	void saveJSON() throws OverworkException
 	{
 		FileHelper.instance.writeJSONToFile(save.toString(4)); //將物件轉換成JSON字串寫入檔案
+	}
+
+	@SuppressWarnings("unchecked")
+	public<T> T get(String key, T defaultValue, Class<T> type)
+	{
+		Object obj = save.opt(key);
+		if (type.isInstance(obj))
+			return (T) obj;
+		else
+			return defaultValue;
+	}
+
+	public void put(String key, Object value)
+	{
+		save.put(key, value);
 	}
 }

@@ -10,7 +10,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("UnnecessaryUnicodeEscape")
-public class TimeOperation
+public class TimeOperation implements IHasDestructor
 {
 	public static final int HOUR = 0;
 	public static final int MINUTE = 1;
@@ -18,15 +18,14 @@ public class TimeOperation
 
 	private final int[] remainTime; //剩餘時間
 	private final int[] passTime; //經過時間
-	private final JSONHelper jsonCore;
 
 	private ScheduledExecutorService executorService = null;
 	private ScheduledFuture<?> everySecond;
 
-	TimeOperation(JSONHelper jsonCore) throws OverworkException
+	TimeOperation() throws OverworkException
 	{
-		this.jsonCore = jsonCore; //JSON處理核心
 		//讀取失敗就會throw
+		JSONHelper jsonCore = JSONHelper.getInstance(); //JSON處理核心
 		remainTime = jsonCore.getTimeArray("remainTime"); //剩餘時間
 		passTime = jsonCore.getTimeArray("passTime"); //經過時間
 	}
@@ -176,11 +175,12 @@ public class TimeOperation
 		executorService = null;
 	}
 
+	@Override
 	public void onApplicationQuit()
 	{
+		JSONHelper jsonCore = JSONHelper.getInstance();
 		jsonCore.setTimeArray("remainTime", remainTime); //儲存到JSON
 		jsonCore.setTimeArray("passTime", passTime); //儲存到JSON
-		jsonCore.saveJSON(); //寫檔
 		pauseTimer();
 	}
 }

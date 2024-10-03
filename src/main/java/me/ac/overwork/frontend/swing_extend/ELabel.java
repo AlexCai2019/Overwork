@@ -1,7 +1,7 @@
 package me.ac.overwork.frontend.swing_extend;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JLabel;
+import java.awt.Font;
 
 public class ELabel extends JLabel
 {

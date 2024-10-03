@@ -13,8 +13,8 @@ public class TimePanel extends PanelParent
 	static final int MY_PANEL_HEIGHT = MainWindow.HEIGHT * 2 / 10;
 
 	private final Font numberFont = new Font(MainWindow.FONT_NAME, Font.BOLD, 24); //數字的字型
-	final JLabel remainTimeLabel = new ELabel("", SwingConstants.CENTER, numberFont);
-	final JLabel passTimeLabel = new ELabel("", SwingConstants.CENTER, numberFont);
+	final JLabel remainTimeLabel = new ELabel(formatTime(timeOperation.getRemainTime()), SwingConstants.CENTER, numberFont);
+	final JLabel passTimeLabel = new ELabel(formatTime(timeOperation.getPassTime()), SwingConstants.CENTER, numberFont);
 
 	TimePanel()
 	{
@@ -34,8 +34,6 @@ public class TimePanel extends PanelParent
 		myPanel.add(passTimeText); //放入panel中
 
 		myPanel.add(passTimeLabel); //放入panel中
-
-		updateTimeLabel(); //初始化時間數字
 	}
 
 	public void updateTimeLabel()

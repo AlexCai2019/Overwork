@@ -1,6 +1,7 @@
 package me.ac.overwork.frontend;
 
 import me.ac.overwork.backend.BackendCore;
+import me.ac.overwork.backend.ColorOperation;
 import me.ac.overwork.backend.TimeOperation;
 import me.ac.overwork.frontend.swing_extend.ELabel;
 
@@ -14,6 +15,7 @@ abstract class PopOutWindow
 	protected final JLabel myLabel = new ELabel("", SwingConstants.CENTER, new Font(MainWindow.FONT_NAME, Font.BOLD, 48)); //顯示的文字
 
 	protected final TimeOperation timeOperation = BackendCore.getInstance().getTimeOperation();
+	protected final ColorOperation colorOperation = BackendCore.getInstance().getColorOperation();
 
 	protected static final int WIDTH = MainWindow.WIDTH * 4 / 5;
 	protected static final int HEIGHT = MainWindow.HEIGHT / 4;

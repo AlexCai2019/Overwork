@@ -1,4 +1,6 @@
 {
+    "passTimeColor": "000000",
+    "remainTimeColor": "000000",
     "passTime": {
         "hour": 0,
         "minute": 0,

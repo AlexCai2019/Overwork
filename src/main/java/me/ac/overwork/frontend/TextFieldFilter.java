@@ -77,6 +77,6 @@ final class ColorFieldFilter extends TextFieldFilter
 {
 	ColorFieldFilter()
 	{
-		super("#[0-9A-Fa-f]{0,6}"); //以#開頭 0到6個hex數字
+		super("[0-9A-Fa-f]{0,6}"); //以#開頭 0到6個hex數字
 	}
 }

@@ -2,6 +2,7 @@ package me.ac.overwork.frontend;
 
 import me.ac.overwork.backend.TimeOperation;
 import me.ac.overwork.frontend.swing_extend.EButton;
+import me.ac.overwork.frontend.swing_extend.EColor;
 import me.ac.overwork.frontend.swing_extend.ELabel;
 import me.ac.overwork.frontend.swing_extend.ETextField;
 
@@ -21,8 +22,6 @@ public class ControlPanel extends PanelParent
 
 	private boolean isStarted = false; //是否計時中
 
-	private final Color minecraftDarkGreen = new Color(0, 170, 0);
-	private final Color minecraftRed = new Color(255, 85, 85);
 	private final Font textFont = new Font(MainWindow.FONT_NAME, Font.PLAIN, 20);
 	private final Font buttonFont = new Font(MainWindow.FONT_NAME, Font.PLAIN, 18);
 	private final Font textFieldFont = new Font(MainWindow.FONT_NAME, Font.PLAIN, 16);
@@ -57,7 +56,7 @@ public class ControlPanel extends PanelParent
 	{
 		//開始按鈕
 		JButton startButton = new EButton("\u958b\u59cb", new Font(MainWindow.FONT_NAME, Font.BOLD, 22), "\u958b\u59cb\u8a08\u6642"); //開始 開始計時
-		startButton.setForeground(minecraftDarkGreen);
+		startButton.setForeground(EColor.MINECRAFT_DARK_GREEN);
 		startButton.setBounds(MainWindow.WIDTH / 3, 10, MainWindow.WIDTH / 3, SUB_PANEL_HEIGHT);
 		startButton.setHorizontalAlignment(SwingConstants.CENTER);
 		startButton.addActionListener(event ->
@@ -74,7 +73,7 @@ public class ControlPanel extends PanelParent
 
 				startButton.setText("\u958b\u59cb"); //開始
 				startButton.setToolTipText("\u958b\u59cb\u8a08\u6642"); //開始計時
-				startButton.setForeground(minecraftDarkGreen);
+				startButton.setForeground(EColor.MINECRAFT_DARK_GREEN);
 				timeOperation.pauseTimer();
 				isStarted = false; //變成暫停狀態
 			}
@@ -82,7 +81,7 @@ public class ControlPanel extends PanelParent
 			{
 				startButton.setText("\u66ab\u505c"); //暫停
 				startButton.setToolTipText("\u66ab\u505c\u8a08\u6642"); //暫停計時
-				startButton.setForeground(minecraftRed);
+				startButton.setForeground(EColor.MINECRAFT_RED);
 				timeOperation.startTimer();
 				isStarted = true; //變成開始狀態
 			}
@@ -189,7 +188,7 @@ public class ControlPanel extends PanelParent
 
 		//增加按鈕
 		JButton addButton = new EButton("\u589e\u52a0", buttonFont, "\u589e\u52a0"); //增加
-		addButton.setForeground(minecraftDarkGreen);
+		addButton.setForeground(EColor.MINECRAFT_DARK_GREEN);
 		addButton.addActionListener(event ->
 		{
 			String addString = timeField.getText(); //從時間輸入框獲得
@@ -207,7 +206,7 @@ public class ControlPanel extends PanelParent
 
 		//減少按鈕
 		JButton subtractButton = new EButton("\u6e1b\u5c11", buttonFont, "\u6e1b\u5c11"); //減少
-		subtractButton.setForeground(minecraftRed);
+		subtractButton.setForeground(EColor.MINECRAFT_RED);
 		subtractButton.addActionListener(event ->
 		{
 			String subtractString = timeField.getText(); //從時間輸入框獲得

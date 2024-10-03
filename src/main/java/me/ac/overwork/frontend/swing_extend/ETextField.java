@@ -1,8 +1,8 @@
 package me.ac.overwork.frontend.swing_extend;
 
-import javax.swing.*;
+import javax.swing.JTextField;
 import javax.swing.text.Document;
-import java.awt.*;
+import java.awt.Font;
 
 public class ETextField extends JTextField
 {

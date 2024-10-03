@@ -4,7 +4,7 @@ import me.ac.overwork.backend.BackendCore;
 import me.ac.overwork.frontend.swing_extend.ELabel;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.Font;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.net.URL;
