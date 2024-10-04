@@ -6,8 +6,33 @@
 ## 使用
 - 支援Java 17.0.10 或以上版本。
 - 在與軟體同個資料夾內放置`save.json`。
-- `save.json`格式為`{"remainTime": {"h": 0, "m": 0, "s": 0}, "passTime: {"h": 0, "m": 0, "s": 0}}`，其中h, m, s代表時、分、秒。
-- 可參考[本專案範例](https://github.com/AlexCai2019/Overwork/blob/lightweight/save.json)。
+### `save.json`格式
+可參考[本專案範例](https://github.com/AlexCai2019/Overwork/blob/lightweight/save.json)。
+```json
+{
+	"remainTime": {
+		"hour": 0,
+		"minute": 0,
+		"second": 0,
+		"color": "000000",
+		"size": 24
+	},
+	"passTime": {
+		"hour": 0,
+		"minute": 0,
+		"second": 0,
+		"color": "000000",
+		"size": 24
+	}
+}
+```
+- remainTime: 剩餘時間
+- passTime: 經過時間
+  - hour: 小時
+  - minute: 分鐘
+  - second: 秒
+  - color: 顏色(16進位)
+  - size: 字型大小
 
 ## 注意
 - 本軟體會產生`remainTime.txt`和`passTime.txt`檔案，最好將本軟體置於不雜亂的資料夾內。

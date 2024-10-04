@@ -18,9 +18,6 @@ abstract class PopOutWindow
 	protected final ColorOperation colorOperation = BackendCore.getInstance().getColorOperation();
 	protected final SizeOperation sizeOperation = BackendCore.getInstance().getSizeOperation();
 
-	protected static final int WIDTH = MainWindow.WIDTH / 2;
-	protected static final int HEIGHT = MainWindow.HEIGHT / 4;
-
 	PopOutWindow()
 	{
 		popOutWindow.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -30,7 +27,6 @@ abstract class PopOutWindow
 		popOutWindow.setLayout(new BorderLayout());
 		popOutWindow.getContentPane().setBackground(Color.GREEN); //綠色背景 方便OBS
 
-		//myLabel.setBounds(0, HEIGHT / 3, WIDTH, HEIGHT / 3);
 		myLabel.setVerticalAlignment(SwingConstants.CENTER);
 		popOutWindow.add(myLabel, BorderLayout.CENTER);
 
