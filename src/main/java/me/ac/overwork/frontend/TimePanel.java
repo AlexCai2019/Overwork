@@ -17,7 +17,7 @@ public class TimePanel extends PanelParent
 	TimePanel()
 	{
 		myPanel.setBounds(0, 0, MainWindow.WIDTH, MY_PANEL_HEIGHT);
-		myPanel.setBackground(Color.GREEN);
+		myPanel.setBackground(Color.GREEN); //綠色背景方便OBS擷取
 
 		//固定文字的字型
 		Font fixedTextFont = new Font(MainWindow.FONT_NAME, Font.PLAIN, 18);

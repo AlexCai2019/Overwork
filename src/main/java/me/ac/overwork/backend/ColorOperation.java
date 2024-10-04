@@ -11,8 +11,8 @@ public class ColorOperation implements IHasDestructor
 	{
 		//讀取失敗會預設為0
 		JSONHelper jsonCore = JSONHelper.getInstance(); //JSON處理核心
-		String remainTimeString = jsonCore.get(JSONHelper.TimeType.REMAIN_TIME, JSONHelper.COLOR, "0", String.class); //剩餘時間
-		String passTimeString = jsonCore.get(JSONHelper.TimeType.PASS_TIME, JSONHelper.COLOR, "0", String.class); //經過時間
+		String remainTimeString = jsonCore.get(JSONHelper.TimeType.remainTime, JSONHelper.COLOR, "0", String.class); //剩餘時間
+		String passTimeString = jsonCore.get(JSONHelper.TimeType.passTime, JSONHelper.COLOR, "0", String.class); //經過時間
 
 		Pattern hexadecimal = Pattern.compile("[0-9A-Fa-f]{1,6}");
 		//可轉換就轉換 不能轉換就變黑色
@@ -24,7 +24,7 @@ public class ColorOperation implements IHasDestructor
 	public void onApplicationQuit()
 	{
 		JSONHelper jsonCore = JSONHelper.getInstance(); //JSON處理核心
-		jsonCore.put(JSONHelper.TimeType.REMAIN_TIME, JSONHelper.COLOR, String.format("%06X", remainTimeColor));
-		jsonCore.put(JSONHelper.TimeType.PASS_TIME, JSONHelper.COLOR, String.format("%06X", passTimeColor));
+		jsonCore.put(JSONHelper.TimeType.remainTime, JSONHelper.COLOR, String.format("%06X", remainTimeColor));
+		jsonCore.put(JSONHelper.TimeType.passTime, JSONHelper.COLOR, String.format("%06X", passTimeColor));
 	}
 }

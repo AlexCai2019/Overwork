@@ -32,7 +32,7 @@ public class FileHelper
 		}
 		catch (IOException ioE)
 		{
-			throw new OverworkException(ioE);
+			throw new OverworkException(ioE); //就是IO異常
 		}
 	}
 
@@ -40,7 +40,7 @@ public class FileHelper
 	{
 		try (FileWriter writer = new FileWriter(JSONHelper.SAVE_FILE_NAME))
 		{
-			writer.write(value);
+			writer.write(value); //寫入JSON
 		}
 		catch (IOException exception)
 		{

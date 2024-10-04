@@ -44,18 +44,18 @@ public class JSONHelper
 			throw new OverworkException(e);
 		}
 
-		initialSaveMap(TimeType.REMAIN_TIME); //初始化remainTime
-		initialSaveMap(TimeType.PASS_TIME); //初始化passTime
+		initialSaveMap(TimeType.remainTime); //初始化remainTime
+		initialSaveMap(TimeType.passTime); //初始化passTime
 	}
 
 	private void initialSaveMap(TimeType timeKey) throws OverworkException
 	{
-		Object timeObject = save.opt(timeKey.toString());
-		if (timeObject instanceof JSONObject time)
-			saveMap.put(timeKey, time); //放入map
+		Object timeObject = save.opt(timeKey.toString()); //從save裡面找remainTime或passTime
+		if (timeObject instanceof JSONObject time) //找到了 而且是正確的(json object)
+			saveMap.put(timeKey, time); //放入map 然後這程式就結束了
 		else if (timeObject == null) //找不到timeKey
 			throw new OverworkException("\u5728 " + SAVE_FILE_NAME + " \u5167\u627e\u4e0d\u5230 \"" + timeKey + '"'); //在 save.json 內找不到 "timeKey"
-		else //timeKey格式錯誤
+		else //有找到timeKey 但格式錯誤
 			throw new OverworkException(SAVE_FILE_NAME + " \u7684 \"" + timeKey + "\" \u683c\u5f0f\u932f\u8aa4"); //save.json 的 "timeKey" 格式錯誤
 	}
 
@@ -81,7 +81,7 @@ public class JSONHelper
 
 	void setTimeArray(TimeType timeType, int[] values) throws OverworkException
 	{
-		JSONObject timeObject = saveMap.get(timeType);
+		JSONObject timeObject = saveMap.get(timeType); //不可能為null 如果真是null 一定是initialSaveMap時沒有正確擲出例外
 		timeObject.put(HOUR, values[TimeOperation.HOUR]);
 		timeObject.put(MINUTE, values[TimeOperation.MINUTE]);
 		timeObject.put(SECOND, values[TimeOperation.SECOND]);
@@ -110,22 +110,11 @@ public class JSONHelper
 			timeObject.put(key, value);
 	}
 
-	enum TimeType
+	enum TimeType //remainTime或passTime, 取決於要獲得已過還是剩餘
 	{
-		REMAIN_TIME("remainTime"),
-		PASS_TIME("passTime");
-
-		private final String name;
-
-		TimeType(String name)
-		{
-			this.name = name;
-		}
-
-		@Override
-		public String toString()
-		{
-			return name;
-		}
+		//千萬不可以改這兩個變數的名字 它們和json key有關
+		//enum的toString是變數的名字
+		remainTime, //toString會是remainTime
+		passTime //toString會是passTime
 	}
 }

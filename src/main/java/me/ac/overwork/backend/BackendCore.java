@@ -19,17 +19,17 @@ public class BackendCore implements IHasDestructor
 		return instance;
 	}
 
-	private final TimeOperation timeOperation; //讓後端核心從檔案中讀取資料
+	private final TimeOperation timeOperation;
 	private final ColorOperation colorOperation;
 	private final SizeOperation sizeOperation;
 
 	private BackendCore() throws OverworkException
 	{
 		Locale.setDefault(Locale.TRADITIONAL_CHINESE); //語言預設繁體中文
-		JSONHelper.createInstance(); //有任何例外就丟給main
+		JSONHelper.createInstance(); //讓後端核心從檔案中讀取資料 有任何例外就丟給main
 		timeOperation = new TimeOperation(); //建立時間處理核心 有任何例外就丟給main
-		colorOperation = new ColorOperation();
-		sizeOperation = new SizeOperation();
+		colorOperation = new ColorOperation(); //建立顏色處理核心
+		sizeOperation = new SizeOperation(); //建立字型大小處理核心
 	}
 
 	public TimeOperation getTimeOperation()
@@ -53,6 +53,6 @@ public class BackendCore implements IHasDestructor
 		timeOperation.onApplicationQuit();
 		colorOperation.onApplicationQuit();
 		sizeOperation.onApplicationQuit();
-		JSONHelper.getInstance().saveJSON(); //寫檔
+		JSONHelper.getInstance().saveJSON(); //上面三個存好JSON後 將JSON寫進檔案
 	}
 }

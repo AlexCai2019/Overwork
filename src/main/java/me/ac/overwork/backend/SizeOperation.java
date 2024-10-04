@@ -10,15 +10,15 @@ public class SizeOperation implements IHasDestructor
 		JSONHelper jsonCore = JSONHelper.getInstance(); //JSON處理核心
 		//讀取失敗會預設為24
 		//範圍是0 ~ 99
-		remainTimeSize = Math.max(Math.min(99, jsonCore.get(JSONHelper.TimeType.REMAIN_TIME, JSONHelper.SIZE, 24, Integer.class)), 0); //剩餘時間
-		passTimeSize = Math.max(Math.min(99, jsonCore.get(JSONHelper.TimeType.PASS_TIME, JSONHelper.SIZE, 24, Integer.class)), 0); //經過時間
+		remainTimeSize = Math.max(Math.min(99, jsonCore.get(JSONHelper.TimeType.remainTime, JSONHelper.SIZE, 24, Integer.class)), 0); //剩餘時間
+		passTimeSize = Math.max(Math.min(99, jsonCore.get(JSONHelper.TimeType.passTime, JSONHelper.SIZE, 24, Integer.class)), 0); //經過時間
 	}
 
 	@Override
 	public void onApplicationQuit()
 	{
 		JSONHelper jsonCore = JSONHelper.getInstance(); //JSON處理核心
-		jsonCore.put(JSONHelper.TimeType.REMAIN_TIME, JSONHelper.SIZE, remainTimeSize);
-		jsonCore.put(JSONHelper.TimeType.PASS_TIME, JSONHelper.SIZE, passTimeSize);
+		jsonCore.put(JSONHelper.TimeType.remainTime, JSONHelper.SIZE, remainTimeSize);
+		jsonCore.put(JSONHelper.TimeType.passTime, JSONHelper.SIZE, passTimeSize);
 	}
 }

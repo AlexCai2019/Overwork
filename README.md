@@ -5,8 +5,8 @@
 
 ## 使用
 - 支援Java 17.0.10 或以上版本。
-- 在與軟體同個資料夾內放置`save.json`。
-### `save.json`格式
+- 在與軟體同個資料夾內放置 `save.json` 。
+### `save.json` 格式
 可參考[本專案範例](https://github.com/AlexCai2019/Overwork/blob/lightweight/save.json)。
 ```json
 {
@@ -36,7 +36,12 @@
 
 ## 注意
 - 按右上角叉叉會自動儲存時間，但其他方法(例如工作管理員)不會。
-- 本專案目前還在開發中，您目前所在的分支是lightweight(輕量)分支，其中不含任何對Google API與Twitch的使用與引用。
+- 本專案目前還在開發中，您目前所在的分支是[lightweight](https://github.com/AlexCai2019/Overwork/tree/lightweight)(輕量)分支，其中不含任何對Google API與Twitch的使用與引用。
 - 相較之下，本專案的main分支乃是真正的集大成之作，也是lightweight分支完成後的下一步目標。
+
+## 聯繫作者
+- GitHub: [Alex Cai](https://github.com/AlexCai2019)
+- E-mail: <a href="mailto:alexcai910630@gmail.com">alexcai910630@gmail.com</a>
+- Discord: @alexcai
 
 > Overwork專案使用[GPL-3.0 license](https://github.com/AlexCai2019/Overwork/blob/lightweight/LICENCE)開放原始碼。了解[GNU通用公眾授權條款](https://zh.wikipedia.org/zh-tw/GNU%E9%80%9A%E7%94%A8%E5%85%AC%E5%85%B1%E8%AE%B8%E5%8F%AF%E8%AF%81)。

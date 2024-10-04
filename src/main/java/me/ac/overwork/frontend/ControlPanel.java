@@ -25,8 +25,15 @@ public class ControlPanel extends PanelParent
 	private final Font textFont = new Font(MainWindow.FONT_NAME, Font.PLAIN, 20);
 	private final Font buttonFont = new Font(MainWindow.FONT_NAME, Font.PLAIN, 18);
 	private final Font textFieldFont = new Font(MainWindow.FONT_NAME, Font.PLAIN, 16);
+
+	//第三列
 	private final JTextField[] remainTextFields = new JTextField[3]; //剩餘時間輸入框
 	private final JButton setRemainButton = new EButton("\u8a2d\u5b9a", buttonFont, "\u8a2d\u5b9a\u5269\u9918\u6642\u9593"); //設定 設定剩餘時間
+
+	//第五列
+	private JTextField addSubRemainTimeField; //直接增加或減少剩餘時間
+	private final JComboBox<String> unitDropDown = new JComboBox<>(); //單位下拉式選單
+
 	private final JTextField[] passTextFields = new JTextField[3]; //經過時間輸入框
 	private final JButton setPassButton = new EButton("\u8a2d\u5b9a", buttonFont, "\u8a2d\u5b9a\u5df2\u904e\u6642\u9593"); //設定 設定已過時間
 
@@ -36,6 +43,7 @@ public class ControlPanel extends PanelParent
 
 		myPanel.add(createFirstRow()); //第一列
 
+		//第二列 剩餘時間設定 文字
 		JLabel remainTimeSet = new ELabel("\u5269\u9918\u6642\u9593\u8a2d\u5b9a", textFont); //剩餘時間設定
 		remainTimeSet.setBounds(LEFT_PADDING, BIG_GAP + SUB_PANEL_HEIGHT, MainWindow.WIDTH, SUB_PANEL_HEIGHT);
 		myPanel.add(remainTimeSet);
@@ -44,6 +52,7 @@ public class ControlPanel extends PanelParent
 		myPanel.add(createFourthRow()); //第四列
 		myPanel.add(createFifthRow()); //第五列
 
+		//第六列 已過時間設定 文字
 		JLabel passedTimeSet = new ELabel("\u5df2\u904e\u6642\u9593\u8a2d\u5b9a", textFont); //已過時間設定
 		passedTimeSet.setBounds(LEFT_PADDING, BIG_GAP * 2 + SUB_PANEL_HEIGHT * 5, MainWindow.WIDTH, SUB_PANEL_HEIGHT);
 		myPanel.add(passedTimeSet);
@@ -170,59 +179,52 @@ public class ControlPanel extends PanelParent
 
 		PlainDocument timeDocument = new PlainDocument();
 		timeDocument.setDocumentFilter(new HourTextFieldFilter()); //輸入中偵測
+		addSubRemainTimeField = new ETextField(timeDocument, 5, "0", textFieldFont, "\u6642\u9593"); //時間
+		fifthRow.add(addSubRemainTimeField); //時間輸入框
 
-		//時間輸入框
-		JTextField timeField = new ETextField(timeDocument, 5, "0", textFieldFont, "\u6642\u9593"); //時間
-		fifthRow.add(timeField); //不可以縮減 下面lambda要用
-
-		//選單
-		String[] timeSelect = new String[3];
-		timeSelect[TimeOperation.HOUR] = "\u5c0f\u6642"; //小時
-		timeSelect[TimeOperation.MINUTE] = "\u5206\u9418"; //分鐘
-		timeSelect[TimeOperation.SECOND] = "\u79d2"; //秒
-		JComboBox<String> unitDropDown = new JComboBox<>(timeSelect); //下拉式選單
+		//下拉式選單
+		unitDropDown.addItem("\u5c0f\u6642"); //小時
+		unitDropDown.addItem("\u5206\u9418"); //分鐘
+		unitDropDown.addItem("\u79d2"); //秒
 		unitDropDown.setFont(textFieldFont);
 		unitDropDown.setToolTipText("\u55ae\u4f4d"); //單位
-		unitDropDown.setSelectedIndex(TimeOperation.MINUTE); //選擇分鐘
+		unitDropDown.setSelectedIndex(TimeOperation.MINUTE); //預設選擇分鐘為單位
 		fifthRow.add(unitDropDown);
 
 		//增加按鈕
-		JButton addButton = new EButton("\u589e\u52a0", buttonFont, "\u589e\u52a0"); //增加
-		addButton.setForeground(EColor.MINECRAFT_DARK_GREEN);
-		addButton.addActionListener(event ->
-		{
-			String addString = timeField.getText(); //從時間輸入框獲得
-			if (addString == null || addString.isEmpty())
-				return;
-			timeOperation.addRemainTime(Integer.parseInt(addString), switch (unitDropDown.getSelectedIndex())
-			{
-				case TimeOperation.HOUR -> TimeUnit.HOURS;
-				case TimeOperation.MINUTE -> TimeUnit.MINUTES;
-				default -> TimeUnit.SECONDS;
-			});
-			MainWindow.getInstance().timePanelManager.updateTimeLabel(); //更新時間顯示
-		});
-		fifthRow.add(addButton);
+		fifthRow.add(createAddSubRemainTimeButton("\u589e\u52a0", EColor.MINECRAFT_DARK_GREEN, true)); //增加
 
 		//減少按鈕
-		JButton subtractButton = new EButton("\u6e1b\u5c11", buttonFont, "\u6e1b\u5c11"); //減少
-		subtractButton.setForeground(EColor.MINECRAFT_RED);
-		subtractButton.addActionListener(event ->
-		{
-			String subtractString = timeField.getText(); //從時間輸入框獲得
-			if (subtractString == null || subtractString.isEmpty())
-				return;
-			timeOperation.subtractRemainTime(Integer.parseInt(subtractString), switch (unitDropDown.getSelectedIndex())
-			{
-				case TimeOperation.HOUR -> TimeUnit.HOURS;
-				case TimeOperation.MINUTE -> TimeUnit.MINUTES;
-				default -> TimeUnit.SECONDS;
-			});
-			MainWindow.getInstance().timePanelManager.updateTimeLabel(); //更新時間顯示
-		});
-		fifthRow.add(subtractButton);
+		fifthRow.add(createAddSubRemainTimeButton("\u6e1b\u5c11", EColor.MINECRAFT_RED, false)); //減少
 
 		return fifthRow;
+	}
+
+	private JButton createAddSubRemainTimeButton(String title, Color color, boolean isAdd)
+	{
+		JButton addSubButton = new EButton(title, buttonFont); //增加或減少
+		addSubButton.setForeground(color);
+		addSubButton.addActionListener(event ->
+		{
+			String timeString = addSubRemainTimeField.getText(); //從時間輸入框獲得
+			if (timeString == null || timeString.isEmpty())
+				return;
+
+			int newValue = Integer.parseInt(timeString);
+			TimeUnit unit = switch (unitDropDown.getSelectedIndex()) //根據選擇的位置不同
+			{
+				case TimeOperation.HOUR -> TimeUnit.HOURS; //小時
+				case TimeOperation.MINUTE -> TimeUnit.MINUTES; //分鐘
+				default -> TimeUnit.SECONDS; //秒
+			};
+			if (isAdd) //是增加
+				timeOperation.addRemainTime(newValue, unit);
+			else //是減少
+				timeOperation.subtractRemainTime(newValue, unit);
+
+			MainWindow.getInstance().timePanelManager.updateTimeLabel(); //更新時間顯示
+		});
+		return addSubButton;
 	}
 
 	private JPanel createSeventhRow()
@@ -272,15 +274,15 @@ public class ControlPanel extends PanelParent
 		eighthPanel.setBounds(LEFT_PADDING, BIG_GAP * 2 + SUB_PANEL_HEIGHT * 7, MainWindow.WIDTH, SUB_PANEL_HEIGHT);
 
 		JButton popOutRemainButton = new EButton("\u5269\u9918\u6642\u9593", buttonFont, "\u5f48\u51fa\u5269\u9918\u6642\u9593\u8996\u7a97"); //剩餘時間視窗 彈出剩餘時間視窗
-		popOutRemainButton.addActionListener(event -> MainWindow.getInstance().remainTimeWindow.setVisible());
+		popOutRemainButton.addActionListener(event -> MainWindow.getInstance().remainTimeWindow.setVisible()); //顯示彈出式視窗
 		eighthPanel.add(popOutRemainButton);
 
 		JButton popOutPassButton = new EButton("\u5df2\u904e\u6642\u9593", buttonFont, "\u5f48\u51fa\u5df2\u904e\u6642\u9593\u8996\u7a97"); //已過時間視窗 彈出已過時間視窗
-		popOutPassButton.addActionListener(event -> MainWindow.getInstance().passTimeWindow.setVisible());
+		popOutPassButton.addActionListener(event -> MainWindow.getInstance().passTimeWindow.setVisible()); //顯示彈出式視窗
 		eighthPanel.add(popOutPassButton);
 
-		URL linkURL = ControlPanel.class.getResource("/open.png");
-		if (linkURL != null)
+		URL linkURL = ControlPanel.class.getResource("/open.png"); //按鈕icon
+		if (linkURL != null) //如果有讀到資源
 		{
 			ImageIcon imageIcon = new ImageIcon(linkURL);
 			popOutRemainButton.setIcon(imageIcon);
@@ -296,5 +298,21 @@ public class ControlPanel extends PanelParent
 		timeTextFields[TimeOperation.HOUR].setText(Integer.toString(newTime[TimeOperation.HOUR]));
 		timeTextFields[TimeOperation.MINUTE].setText(Integer.toString(newTime[TimeOperation.MINUTE]));
 		timeTextFields[TimeOperation.SECOND].setText(Integer.toString(newTime[TimeOperation.SECOND]));
+	}
+
+	private static class HourTextFieldFilter extends TextFieldFilter
+	{
+		HourTextFieldFilter()
+		{
+			super("\\d{0,5}"); //0到5個數字
+		}
+	}
+
+	private static class MinuteSecondFieldFilter extends TextFieldFilter
+	{
+		MinuteSecondFieldFilter()
+		{
+			super("([0-5]?\\d)?"); //空字串 或0~59
+		}
 	}
 }

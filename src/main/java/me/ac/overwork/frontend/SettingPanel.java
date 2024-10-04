@@ -29,16 +29,13 @@ public class SettingPanel extends PanelParent
 
 	SettingPanel()
 	{
-		super(); //設定
-
 		myPanel.setLayout(null);
 
 		myPanel.add(createTimeOptionPanel("\u5269\u9918", REMAIN_INDEX, colorOperation.remainTimeColor, sizeOperation.remainTimeSize)); //剩餘
-
 		myPanel.add(createTimeOptionPanel("\u7d93\u904e", PASS_INDEX, colorOperation.passTimeColor, sizeOperation.passTimeSize)); //經過
 
-		myPanel.add(createConfirmButton());
-		myPanel.add(createCancelButton());
+		myPanel.add(createConfirmButton()); //確定按鈕
+		myPanel.add(createCancelButton()); //取消按鈕
 	}
 
 	private JPanel createTimeOptionPanel(String title, int index, int initialColor, int initialSize)
@@ -48,7 +45,8 @@ public class SettingPanel extends PanelParent
 		constraints.anchor = GridBagConstraints.CENTER;
 
 		JPanel timeOptionsPanel = new JPanel(new GridBagLayout());
-		timeOptionsPanel.setBounds(10, 10 + SUB_PANEL_HEIGHT * index, SUB_PANEL_WIDTH, SUB_PANEL_HEIGHT);
+		//y是開頭10格 加上panel的高度
+		timeOptionsPanel.setBounds(10, 10 * (index + 1) + SUB_PANEL_HEIGHT * index, SUB_PANEL_WIDTH, SUB_PANEL_HEIGHT);
 		TitledBorder titledBorder = BorderFactory.createTitledBorder(title + "\u6642\u9593");
 		titledBorder.setTitleFont(borderFont);
 		timeOptionsPanel.setBorder(titledBorder); //title時間
@@ -59,6 +57,7 @@ public class SettingPanel extends PanelParent
 
 		PlainDocument colorDocument = new PlainDocument();
 		colorDocument.setDocumentFilter(new ColorFieldFilter()); //輸入中偵測
+		//顏色輸入框
 		colorFields[index] = new ETextField(colorDocument, 6, String.format("%06X", initialColor),
 				textFont, "\u8a2d\u5b9a" + title + "\u6642\u9593\u984f\u8272(16\u9032\u4f4d\u8272\u78bc)"); //設定title時間顏色(16進位色碼)
 		constraints.gridx = 1; //第1行
@@ -71,6 +70,7 @@ public class SettingPanel extends PanelParent
 		JColorChooser.setDefaultLocale(Locale.TRADITIONAL_CHINESE); //語言預設繁體中文 (好像沒效果)
 		chooserButton.addActionListener(event ->
 		{
+			//顏色選擇視窗 不含alpha
 			Color newColor = JColorChooser.showDialog(timeOptionsPanel, "\u984f\u8272\u9078\u64c7", new Color(getRGB(colorFields[index].getText())), false); //顏色選擇
 			if (newColor != null) //如果按確定
 				colorFields[index].setText(String.format("%06X", newColor.getRGB() & 0xFFFFFF)); //將選擇的顏色放入輸入框裡 不含alpha
@@ -83,7 +83,9 @@ public class SettingPanel extends PanelParent
 
 		PlainDocument sizeDocument = new PlainDocument();
 		sizeDocument.setDocumentFilter(new SizeFieldFilter());
-		sizeFields[index] = new ETextField(sizeDocument, 2, Integer.toString(initialSize), textFont, "\u8a2d\u5b9a" + title + "\u6642\u9593\u5927\u5c0f"); //設定title時間大小
+		//字型大小輸入框
+		sizeFields[index] = new ETextField(sizeDocument, 2, Integer.toString(initialSize),
+				textFont, "\u8a2d\u5b9a" + title + "\u6642\u9593\u5927\u5c0f"); //設定title時間大小
 		constraints.gridx = 1; //第1行
 		timeOptionsPanel.add(sizeFields[index], constraints);
 
@@ -137,12 +139,15 @@ public class SettingPanel extends PanelParent
 
 		cancelButton.addActionListener(event ->
 		{
-			colorFields[REMAIN_INDEX].setText(String.format("%06X", colorOperation.remainTimeColor)); //恢復輸入框
-			colorFields[PASS_INDEX].setText(String.format("%06X", colorOperation.passTimeColor)); //恢復輸入框
+			//恢復輸入框
+			colorFields[REMAIN_INDEX].setText(String.format("%06X", colorOperation.remainTimeColor));
+			colorFields[PASS_INDEX].setText(String.format("%06X", colorOperation.passTimeColor));
 
+			//恢復輸入框
 			sizeFields[REMAIN_INDEX].setText(Integer.toString(sizeOperation.remainTimeSize));
 			sizeFields[PASS_INDEX].setText(Integer.toString(sizeOperation.passTimeSize));
 
+			//恢復滑塊
 			sizeSliders[REMAIN_INDEX].setValue(sizeOperation.remainTimeSize);
 			sizeSliders[PASS_INDEX].setValue(sizeOperation.passTimeSize);
 		});
@@ -157,6 +162,22 @@ public class SettingPanel extends PanelParent
 
 	private int getSize(String sizeString)
 	{
-		return sizeString == null || sizeString.isEmpty() ? 0 : Integer.parseInt(sizeString);
+		return sizeString == null || sizeString.isEmpty() ? 0 : Integer.parseInt(sizeString); //如果是空字串就變0
+	}
+
+	private static class ColorFieldFilter extends TextFieldFilter
+	{
+		ColorFieldFilter()
+		{
+			super("[0-9A-Fa-f]{0,6}"); //0到6個hex數字
+		}
+	}
+
+	private static class SizeFieldFilter extends TextFieldFilter
+	{
+		SizeFieldFilter()
+		{
+			super("\\d{0,2}"); //空字串 或0 ~ 99
+		}
 	}
 }

@@ -26,8 +26,8 @@ public class TimeOperation implements IHasDestructor
 	{
 		//讀取失敗就會throw
 		JSONHelper jsonCore = JSONHelper.getInstance(); //JSON處理核心
-		remainTime = jsonCore.getTimeArray(JSONHelper.TimeType.REMAIN_TIME); //剩餘時間
-		passTime = jsonCore.getTimeArray(JSONHelper.TimeType.PASS_TIME); //經過時間
+		remainTime = jsonCore.getTimeArray(JSONHelper.TimeType.remainTime); //剩餘時間
+		passTime = jsonCore.getTimeArray(JSONHelper.TimeType.passTime); //經過時間
 	}
 
 	public void addRemainTime(int value, TimeUnit unit)
@@ -95,24 +95,24 @@ public class TimeOperation implements IHasDestructor
 			return;
 
 		//有人變成負數
-		int remainSeconds = remainTime[HOUR] * 60 * 60 + remainTime[MINUTE] * 60 + remainTime[SECOND]; //剩下的時間變成秒
-		if (remainSeconds <= 0) //時間到了
+		int totalInSeconds = remainTime[HOUR] * 60 * 60 + remainTime[MINUTE] * 60 + remainTime[SECOND]; //將剩下的時間變成以秒為單位
+		if (totalInSeconds <= 0) //時間到了
 		{
 			Arrays.fill(remainTime, 0);
 			return;
 		}
 
-		remainTime[SECOND] = remainSeconds % 60;
+		remainTime[SECOND] = totalInSeconds % 60; //以秒為單位下 除以60的餘數是真正的秒 例如64秒等於1分4秒 64 % 60 = 4
 
-		int remainMinutes = remainSeconds / 60;
-		remainTime[MINUTE] = remainMinutes % 60;
+		int totalInMinutes = totalInSeconds / 60; //以秒為單位下 除以60會得到以分為單位 其中秒被無條件捨去了 例如60秒 / 60 = 1分
+		remainTime[MINUTE] = totalInMinutes % 60; //以分為單位下 除以60的餘數是真正的分 例如72分等於1時12分 72 % 60 = 12
 
-		remainTime[HOUR] = remainMinutes / 60;
+		remainTime[HOUR] = totalInMinutes / 60; //以分為單位下 除以60會得到以時為單位 其中分和秒被無條件捨去了 例如120分 / 60 = 2時
 	}
 
 	public void setRemainTime(int value, TimeUnit unit)
 	{
-		switch (unit)
+		switch (unit) //直接設定時間 caller應該做數值檢測
 		{
 			case HOURS -> remainTime[HOUR] = value;
 			case MINUTES -> remainTime[MINUTE] = value;
@@ -122,7 +122,7 @@ public class TimeOperation implements IHasDestructor
 
 	public void setPassTime(int value, TimeUnit unit)
 	{
-		switch (unit)
+		switch (unit) //直接設定時間 caller應該做數值檢測
 		{
 			case HOURS -> passTime[HOUR] = value;
 			case MINUTES -> passTime[MINUTE] = value;
@@ -137,7 +137,7 @@ public class TimeOperation implements IHasDestructor
 
 	public int[] getPassTime()
 	{
-		return passTime.clone();
+		return passTime.clone(); //陣列是少數可以正常用clone()的物件
 	}
 
 	//不用後端計時，修改比較方便
@@ -155,9 +155,9 @@ public class TimeOperation implements IHasDestructor
 			MainWindow.getInstance().timePanelManager.updateTimeLabel(); //根據資料更新顯示數字
 
 			MainWindow mainWindow = MainWindow.getInstance();
-			if (mainWindow.remainTimeWindow.isVisible())
+			if (mainWindow.remainTimeWindow.isVisible()) //如果彈出式視窗有顯示
 				mainWindow.remainTimeWindow.updateTimeLabel(); //更新彈出式視窗剩餘時間
-			if (mainWindow.passTimeWindow.isVisible())
+			if (mainWindow.passTimeWindow.isVisible()) //如果彈出式視窗有顯示
 				mainWindow.passTimeWindow.updateTimeLabel(); //更新彈出式視窗已過時間
 		}, 0, 1, TimeUnit.SECONDS);
 	}
@@ -166,6 +166,7 @@ public class TimeOperation implements IHasDestructor
 	{
 		if (executorService == null) //已經結束了
 			return;
+		//結束計時
 		everySecond.cancel(true);
 		executorService.shutdown();
 		executorService = null;
@@ -175,8 +176,8 @@ public class TimeOperation implements IHasDestructor
 	public void onApplicationQuit() throws OverworkException
 	{
 		JSONHelper jsonCore = JSONHelper.getInstance();
-		jsonCore.setTimeArray(JSONHelper.TimeType.REMAIN_TIME, remainTime); //儲存到JSON
-		jsonCore.setTimeArray(JSONHelper.TimeType.PASS_TIME, passTime); //儲存到JSON
-		pauseTimer();
+		jsonCore.setTimeArray(JSONHelper.TimeType.remainTime, remainTime); //儲存到JSON
+		jsonCore.setTimeArray(JSONHelper.TimeType.passTime, passTime); //儲存到JSON
+		pauseTimer(); //結束計時
 	}
 }
