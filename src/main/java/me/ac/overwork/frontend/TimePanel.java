@@ -28,6 +28,7 @@ public class TimePanel extends PanelParent
 
 		remainTimeLabel.setFont(new Font(MainWindow.FONT_NAME, Font.BOLD, sizeOperation.remainTimeSize));
 		remainTimeLabel.setBounds(18 * 4, 0, MainWindow.WIDTH - 18 * 4, MY_PANEL_HEIGHT / 2);
+		remainTimeLabel.setForeground(new Color(colorOperation.remainTimeColor));
 		myPanel.add(remainTimeLabel); //放入panel中
 
 		JLabel passTimeText = new ELabel("\u7d93\u904e\u6642\u9593", fixedTextFont); //經過時間
@@ -36,6 +37,7 @@ public class TimePanel extends PanelParent
 
 		passTimeLabel.setFont(new Font(MainWindow.FONT_NAME, Font.BOLD, sizeOperation.passTimeSize));
 		passTimeLabel.setBounds(18 * 4, MY_PANEL_HEIGHT / 2, MainWindow.WIDTH - 18 * 4, MY_PANEL_HEIGHT / 2);
+		passTimeLabel.setForeground(new Color(colorOperation.passTimeColor));
 		myPanel.add(passTimeLabel); //放入panel中
 	}
 
