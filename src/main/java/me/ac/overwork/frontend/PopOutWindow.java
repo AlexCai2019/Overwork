@@ -2,6 +2,7 @@ package me.ac.overwork.frontend;
 
 import me.ac.overwork.backend.BackendCore;
 import me.ac.overwork.backend.ColorOperation;
+import me.ac.overwork.backend.SizeOperation;
 import me.ac.overwork.backend.TimeOperation;
 
 import javax.swing.*;
@@ -15,6 +16,7 @@ abstract class PopOutWindow
 
 	protected final TimeOperation timeOperation = BackendCore.getInstance().getTimeOperation();
 	protected final ColorOperation colorOperation = BackendCore.getInstance().getColorOperation();
+	protected final SizeOperation sizeOperation = BackendCore.getInstance().getSizeOperation();
 
 	protected static final int WIDTH = MainWindow.WIDTH / 2;
 	protected static final int HEIGHT = MainWindow.HEIGHT / 4;

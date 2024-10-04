@@ -42,11 +42,17 @@ public class BackendCore implements IHasDestructor
 		return colorOperation;
 	}
 
+	public SizeOperation getSizeOperation()
+	{
+		return sizeOperation;
+	}
+
 	@Override
 	public void onApplicationQuit() throws OverworkException
 	{
 		timeOperation.onApplicationQuit();
 		colorOperation.onApplicationQuit();
+		sizeOperation.onApplicationQuit();
 		JSONHelper.getInstance().saveJSON(); //寫檔
 	}
 }

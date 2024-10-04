@@ -100,10 +100,7 @@ public class JSONHelper
 			return defaultValue; //回傳預設值
 
 		Object obj = timeObject.opt(key); //color或size
-		if (type.isInstance(obj)) //的確是要求的類型
-			return (T) obj;
-		else
-			return defaultValue;
+		return type.isInstance(obj) ? (T) obj : defaultValue;
 	}
 
 	void put(TimeType timeType, String key, Object value)

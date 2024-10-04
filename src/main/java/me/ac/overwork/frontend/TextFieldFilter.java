@@ -6,7 +6,7 @@ import javax.swing.text.Document;
 import javax.swing.text.DocumentFilter;
 import java.util.regex.Pattern;
 
-sealed class TextFieldFilter extends DocumentFilter permits HourTextFieldFilter, MinuteSecondFieldFilter, ColorFieldFilter
+sealed class TextFieldFilter extends DocumentFilter permits HourTextFieldFilter, MinuteSecondFieldFilter, ColorFieldFilter, SizeFieldFilter
 {
 	protected final Pattern regex; //要檢查的正規表示式
 
@@ -78,5 +78,13 @@ final class ColorFieldFilter extends TextFieldFilter
 	ColorFieldFilter()
 	{
 		super("[0-9A-Fa-f]{0,6}"); //以#開頭 0到6個hex數字
+	}
+}
+
+final class SizeFieldFilter extends TextFieldFilter
+{
+	SizeFieldFilter()
+	{
+		super("\\d{0,2}");
 	}
 }

@@ -3,12 +3,14 @@
         "hour": 0,
         "minute": 0,
         "second": 0,
-        "color": "000000"
+        "color": "000000",
+        "size": 24
     },
     "remainTime": {
         "hour": 0,
         "minute": 0,
         "second": 0,
-        "color": "000000"
+        "color": "000000",
+        "size": 24
     }
 }

@@ -1,6 +1,6 @@
 package me.ac.overwork.frontend;
 
-import java.awt.Color;
+import java.awt.*;
 
 @SuppressWarnings("UnnecessaryUnicodeEscape") //為了避免亂碼
 public class RemainTimeWindow extends PopOutWindow
@@ -11,6 +11,7 @@ public class RemainTimeWindow extends PopOutWindow
 		popOutWindow.setTitle("\u5269\u9918\u6642\u9593"); //剩餘時間
 		popOutWindow.setBounds(MainWindow.WIDTH, 0, WIDTH, HEIGHT);
 		myLabel.setForeground(new Color(colorOperation.remainTimeColor));
+		myLabel.setFont(new Font(MainWindow.FONT_NAME, Font.BOLD, sizeOperation.remainTimeSize));
 	}
 
 	@Override

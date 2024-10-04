@@ -10,10 +10,4 @@ public class ELabel extends JLabel
 		super(text);
 		setFont(font);
 	}
-
-	public ELabel(String text, int horizontalAlignment, Font font)
-	{
-		super(text, null, horizontalAlignment);
-		setFont(font);
-	}
 }

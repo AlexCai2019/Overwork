@@ -1,7 +1,6 @@
 package me.ac.overwork.frontend;
 
 import me.ac.overwork.backend.BackendCore;
-import me.ac.overwork.backend.JSONHelper;
 import me.ac.overwork.frontend.swing_extend.ELabel;
 
 import javax.swing.*;
@@ -36,8 +35,6 @@ public class MainWindow
 	static final String FONT_NAME = "Microsoft JhengHei UI";
 	static final int WIDTH = 360;
 	static final int HEIGHT = 580;
-
-	Font remainTimeFont;
 
 	private MainWindow()
 	{
