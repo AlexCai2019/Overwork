@@ -47,16 +47,4 @@ public class FileHelper
 			throw new OverworkException(exception);
 		}
 	}
-
-	void updateTimeFile(String fileName, int[] time)
-	{
-		try (FileWriter writer = new FileWriter(fileName))
-		{
-			writer.write(String.format("%d:%02d:%02d", time[TimeOperation.HOUR], time[TimeOperation.MINUTE], time[TimeOperation.SECOND]));
-		}
-		catch (IOException exception)
-		{
-			throw new OverworkException(exception);
-		}
-	}
 }

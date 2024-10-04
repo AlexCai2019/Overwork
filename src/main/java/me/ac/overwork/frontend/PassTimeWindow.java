@@ -10,7 +10,7 @@ public class PassTimeWindow extends PopOutWindow
 		super();
 		popOutWindow.setTitle("\u5df2\u904e\u6642\u9593"); //已過時間
 		popOutWindow.setBounds(MainWindow.WIDTH, HEIGHT, WIDTH, HEIGHT);
-		myLabel.setForeground(new Color(colorOperation.passTime));
+		myLabel.setForeground(new Color(colorOperation.passTimeColor));
 	}
 
 	@Override

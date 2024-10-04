@@ -4,6 +4,9 @@ import me.ac.overwork.OverworkException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @SuppressWarnings("UnnecessaryUnicodeEscape")
 public class JSONHelper
 {
@@ -15,14 +18,20 @@ public class JSONHelper
 			instance = new JSONHelper();
 	}
 
-	public static JSONHelper getInstance()
+	static JSONHelper getInstance()
 	{
 		return instance;
 	}
 
 	static final String SAVE_FILE_NAME = "save.json";
+	static final String HOUR = "hour";
+	static final String MINUTE = "minute";
+	static final String SECOND = "second";
+	static final String COLOR = "color";
+	static final String SIZE = "size";
 
 	private final JSONObject save;
+	private final Map<TimeType, JSONObject> saveMap = new HashMap<>(2);
 
 	private JSONHelper() throws OverworkException
 	{
@@ -34,39 +43,48 @@ public class JSONHelper
 		{
 			throw new OverworkException(e);
 		}
+
+		initialSaveMap(TimeType.REMAIN_TIME); //初始化remainTime
+		initialSaveMap(TimeType.PASS_TIME); //初始化passTime
 	}
 
-	int[] getTimeArray(String key) throws OverworkException
+	private void initialSaveMap(TimeType timeKey) throws OverworkException
 	{
-		Object element = save.opt(key); //尋找key
-		if (element == null) //找不到
-			throw new OverworkException("\u5728 " + SAVE_FILE_NAME + " \u5167\u627e\u4e0d\u5230 \"" + key + '"'); //在 save.json 內找不到 "key"
-		if (!(element instanceof JSONObject timeObject)) //不是JSONObject
-			throw new OverworkException(key + " \u4e0d\u662fJSON\u7269\u4ef6"); //不是JSON物件
+		Object timeObject = save.opt(timeKey.toString());
+		if (timeObject instanceof JSONObject time)
+			saveMap.put(timeKey, time); //放入map
+		else if (timeObject == null) //找不到timeKey
+			throw new OverworkException("\u5728 " + SAVE_FILE_NAME + " \u5167\u627e\u4e0d\u5230 \"" + timeKey + '"'); //在 save.json 內找不到 "timeKey"
+		else //timeKey格式錯誤
+			throw new OverworkException(SAVE_FILE_NAME + " \u7684 \"" + timeKey + "\" \u683c\u5f0f\u932f\u8aa4"); //save.json 的 "timeKey" 格式錯誤
+	}
+
+	int[] getTimeArray(TimeType timeType) throws OverworkException
+	{
+		JSONObject timeObject = saveMap.get(timeType); //尋找timeKey
 
 		int[] timeArray = new int[3];
 
 		try
 		{
-			timeArray[TimeOperation.HOUR] = timeObject.getInt("hour"); //小時
-			timeArray[TimeOperation.MINUTE] = timeObject.getInt("minute"); //分鐘
-			timeArray[TimeOperation.SECOND] = timeObject.getInt("second"); //秒
+			timeArray[TimeOperation.HOUR] = timeObject.getInt(HOUR); //小時
+			timeArray[TimeOperation.MINUTE] = timeObject.getInt(MINUTE); //分鐘
+			timeArray[TimeOperation.SECOND] = timeObject.getInt(SECOND); //秒
 		}
 		catch (JSONException exception) //不是int 或 不是數字字串
 		{
-			throw new OverworkException(key + " \u683c\u5f0f\u932f\u8aa4"); //格式錯誤
+			throw new OverworkException(timeType + " \u683c\u5f0f\u932f\u8aa4"); //格式錯誤
 		}
 
 		return timeArray;
 	}
 
-	void setTimeArray(String key, int[] values)
+	void setTimeArray(TimeType timeType, int[] values) throws OverworkException
 	{
-		JSONObject timeObject = new JSONObject();
-		timeObject.put("hour", values[TimeOperation.HOUR]);
-		timeObject.put("minute", values[TimeOperation.MINUTE]);
-		timeObject.put("second", values[TimeOperation.SECOND]);
-		save.put(key, timeObject); //將物件寫入root json
+		JSONObject timeObject = saveMap.get(timeType);
+		timeObject.put(HOUR, values[TimeOperation.HOUR]);
+		timeObject.put(MINUTE, values[TimeOperation.MINUTE]);
+		timeObject.put(SECOND, values[TimeOperation.SECOND]);
 	}
 
 	void saveJSON() throws OverworkException
@@ -75,17 +93,42 @@ public class JSONHelper
 	}
 
 	@SuppressWarnings("unchecked")
-	public<T> T get(String key, T defaultValue, Class<T> type)
+	<T> T get(TimeType timeType, String key, T defaultValue, Class<T> type)
 	{
-		Object obj = save.opt(key);
-		if (type.isInstance(obj))
+		JSONObject timeObject = saveMap.get(timeType); //remainTime或passTime
+		if (timeObject == null) //找不到
+			return defaultValue; //回傳預設值
+
+		Object obj = timeObject.opt(key); //color或size
+		if (type.isInstance(obj)) //的確是要求的類型
 			return (T) obj;
 		else
 			return defaultValue;
 	}
 
-	public void put(String key, Object value)
+	void put(TimeType timeType, String key, Object value)
 	{
-		save.put(key, value);
+		JSONObject timeObject = saveMap.get(timeType); //remainTime或passTime
+		if (timeObject != null)
+			timeObject.put(key, value);
+	}
+
+	enum TimeType
+	{
+		REMAIN_TIME("remainTime"),
+		PASS_TIME("passTime");
+
+		private final String name;
+
+		TimeType(String name)
+		{
+			this.name = name;
+		}
+
+		@Override
+		public String toString()
+		{
+			return name;
+		}
 	}
 }

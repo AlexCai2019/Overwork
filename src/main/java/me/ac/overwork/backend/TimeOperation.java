@@ -26,8 +26,8 @@ public class TimeOperation implements IHasDestructor
 	{
 		//讀取失敗就會throw
 		JSONHelper jsonCore = JSONHelper.getInstance(); //JSON處理核心
-		remainTime = jsonCore.getTimeArray("remainTime"); //剩餘時間
-		passTime = jsonCore.getTimeArray("passTime"); //經過時間
+		remainTime = jsonCore.getTimeArray(JSONHelper.TimeType.REMAIN_TIME); //剩餘時間
+		passTime = jsonCore.getTimeArray(JSONHelper.TimeType.PASS_TIME); //經過時間
 	}
 
 	public void addRemainTime(int value, TimeUnit unit)
@@ -159,10 +159,6 @@ public class TimeOperation implements IHasDestructor
 				mainWindow.remainTimeWindow.updateTimeLabel(); //更新彈出式視窗剩餘時間
 			if (mainWindow.passTimeWindow.isVisible())
 				mainWindow.passTimeWindow.updateTimeLabel(); //更新彈出式視窗已過時間
-
-			//寫檔
-			FileHelper.instance.updateTimeFile("remainTime.txt", remainTime);
-			FileHelper.instance.updateTimeFile("passTime.txt", passTime);
 		}, 0, 1, TimeUnit.SECONDS);
 	}
 
@@ -176,11 +172,11 @@ public class TimeOperation implements IHasDestructor
 	}
 
 	@Override
-	public void onApplicationQuit()
+	public void onApplicationQuit() throws OverworkException
 	{
 		JSONHelper jsonCore = JSONHelper.getInstance();
-		jsonCore.setTimeArray("remainTime", remainTime); //儲存到JSON
-		jsonCore.setTimeArray("passTime", passTime); //儲存到JSON
+		jsonCore.setTimeArray(JSONHelper.TimeType.REMAIN_TIME, remainTime); //儲存到JSON
+		jsonCore.setTimeArray(JSONHelper.TimeType.PASS_TIME, passTime); //儲存到JSON
 		pauseTimer();
 	}
 }

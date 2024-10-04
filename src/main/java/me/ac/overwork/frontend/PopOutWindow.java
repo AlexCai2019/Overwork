@@ -3,7 +3,6 @@ package me.ac.overwork.frontend;
 import me.ac.overwork.backend.BackendCore;
 import me.ac.overwork.backend.ColorOperation;
 import me.ac.overwork.backend.TimeOperation;
-import me.ac.overwork.frontend.swing_extend.ELabel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,12 +11,12 @@ import java.net.URL;
 abstract class PopOutWindow
 {
 	protected final JFrame popOutWindow = new JFrame();
-	protected final JLabel myLabel = new ELabel("", SwingConstants.CENTER, new Font(MainWindow.FONT_NAME, Font.BOLD, 48)); //顯示的文字
+	protected final JLabel myLabel = new JLabel("", SwingConstants.CENTER); //顯示的文字
 
 	protected final TimeOperation timeOperation = BackendCore.getInstance().getTimeOperation();
 	protected final ColorOperation colorOperation = BackendCore.getInstance().getColorOperation();
 
-	protected static final int WIDTH = MainWindow.WIDTH * 4 / 5;
+	protected static final int WIDTH = MainWindow.WIDTH / 2;
 	protected static final int HEIGHT = MainWindow.HEIGHT / 4;
 
 	PopOutWindow()
@@ -28,9 +27,8 @@ abstract class PopOutWindow
 			popOutWindow.setIconImage(new ImageIcon(icon).getImage());
 		popOutWindow.setLayout(new BorderLayout());
 		popOutWindow.getContentPane().setBackground(Color.GREEN); //綠色背景 方便OBS
-		popOutWindow.setResizable(false); //不能變更大小
 
-		myLabel.setBounds(0, HEIGHT / 3, WIDTH, HEIGHT / 3);
+		//myLabel.setBounds(0, HEIGHT / 3, WIDTH, HEIGHT / 3);
 		myLabel.setVerticalAlignment(SwingConstants.CENTER);
 		popOutWindow.add(myLabel, BorderLayout.CENTER);
 
