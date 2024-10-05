@@ -152,9 +152,9 @@ public class TimeOperation implements IHasDestructor
 			subtractRemainTime(); //減少剩餘時間1秒
 			addPassTime(); //增加經過時間1秒
 
-			MainWindow.getInstance().timePanelManager.updateTimeLabel(); //根據資料更新顯示數字
-
 			MainWindow mainWindow = MainWindow.getInstance();
+			mainWindow.timePanelManager.updateTimeLabel(); //根據資料更新顯示數字
+
 			if (mainWindow.remainTimeWindow.isVisible()) //如果彈出式視窗有顯示
 				mainWindow.remainTimeWindow.updateTimeLabel(); //更新彈出式視窗剩餘時間
 			if (mainWindow.passTimeWindow.isVisible()) //如果彈出式視窗有顯示

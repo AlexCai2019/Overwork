@@ -59,7 +59,7 @@ public class MainWindow
 		mainWindow.setResizable(false);
 
 		//時間介面
-		timePanelManager = new TimePanel(); //現在才創 為了給載入JSON留時間
+		timePanelManager = new TimePanel(this); //現在才創 為了給載入JSON留時間
 		mainWindow.add(timePanelManager.myPanel);
 
 		//分頁系統
@@ -67,17 +67,19 @@ public class MainWindow
 		tabbedPane.setFont(new Font(MainWindow.FONT_NAME, Font.PLAIN, 12));
 		tabbedPane.setBounds(0, TimePanel.MY_PANEL_HEIGHT, MainWindow.WIDTH, ControlPanel.MY_PANEL_HEIGHT);
 
-		controlPanelManager = new ControlPanel(); //計時器控制頁面
+		//控制介面
+		controlPanelManager = new ControlPanel(this); //計時器控制頁面
 		tabbedPane.addTab("\u8a08\u6642\u5668", controlPanelManager.myPanel); //計時器
-
-		settingPanelManager = new SettingPanel(); //視窗設定頁面
-		tabbedPane.addTab("\u8a2d\u5b9a", settingPanelManager.myPanel); //設定
-
-		mainWindow.add(tabbedPane);
 
 		//彈出式視窗
 		remainTimeWindow = new RemainTimeWindow(); //剩餘時間
 		passTimeWindow = new PassTimeWindow(); //已過時間
+
+		//設定介面
+		settingPanelManager = new SettingPanel(this); //視窗設定頁面
+		tabbedPane.addTab("\u8a2d\u5b9a", settingPanelManager.myPanel); //設定
+
+		mainWindow.add(tabbedPane);
 
 		mainWindow.setVisible(true); //視窗顯示
 	}

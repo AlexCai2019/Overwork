@@ -14,8 +14,10 @@ public class TimePanel extends PanelParent
 	final JLabel remainTimeLabel = new JLabel(formatTime(timeOperation.getRemainTime()), SwingConstants.CENTER);
 	final JLabel passTimeLabel = new JLabel(formatTime(timeOperation.getPassTime()), SwingConstants.CENTER);
 
-	TimePanel()
+	TimePanel(MainWindow mainWindow)
 	{
+		super(mainWindow);
+
 		myPanel.setBounds(0, 0, MainWindow.WIDTH, MY_PANEL_HEIGHT);
 		myPanel.setBackground(Color.GREEN); //綠色背景方便OBS擷取
 
@@ -26,18 +28,18 @@ public class TimePanel extends PanelParent
 		remainTimeText.setBounds(10, 0, 18 * 4, MY_PANEL_HEIGHT / 2);
 		myPanel.add(remainTimeText);
 
-		remainTimeLabel.setFont(new Font(MainWindow.FONT_NAME, Font.BOLD, sizeOperation.remainTimeSize));
+		remainTimeLabel.setFont(new Font(MainWindow.FONT_NAME, Font.BOLD, sizeOperation.remainTimeSize)); //從後端載入字型大小
 		remainTimeLabel.setBounds(18 * 4, 0, MainWindow.WIDTH - 18 * 4, MY_PANEL_HEIGHT / 2);
-		remainTimeLabel.setForeground(new Color(colorOperation.remainTimeColor));
+		remainTimeLabel.setForeground(new Color(colorOperation.remainTimeColor)); //從後端載入顏色
 		myPanel.add(remainTimeLabel); //放入panel中
 
 		JLabel passTimeText = new ELabel("\u7d93\u904e\u6642\u9593", fixedTextFont); //經過時間
 		passTimeText.setBounds(10, MY_PANEL_HEIGHT / 2, 18 * 4, MY_PANEL_HEIGHT / 2);
 		myPanel.add(passTimeText);
 
-		passTimeLabel.setFont(new Font(MainWindow.FONT_NAME, Font.BOLD, sizeOperation.passTimeSize));
+		passTimeLabel.setFont(new Font(MainWindow.FONT_NAME, Font.BOLD, sizeOperation.passTimeSize)); //從後端載入字型大小
 		passTimeLabel.setBounds(18 * 4, MY_PANEL_HEIGHT / 2, MainWindow.WIDTH - 18 * 4, MY_PANEL_HEIGHT / 2);
-		passTimeLabel.setForeground(new Color(colorOperation.passTimeColor));
+		passTimeLabel.setForeground(new Color(colorOperation.passTimeColor)); //從後端載入顏色
 		myPanel.add(passTimeLabel); //放入panel中
 	}
 

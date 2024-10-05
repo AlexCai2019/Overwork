@@ -20,6 +20,8 @@ class TextFieldFilter extends DocumentFilter
 		return regex.matcher(content).matches(); //回傳正規表示式檢查是否通過
 	}
 
+	protected void onValid(String content) {}
+
 	@Override
 	public void insertString(FilterBypass fb, int offset, String text, AttributeSet attrs) throws BadLocationException
 	{
@@ -29,7 +31,10 @@ class TextFieldFilter extends DocumentFilter
 				.toString();
 
 		if (isValid(content)) //通過
+		{
 			super.insertString(fb, offset, text, attrs);
+			onValid(content);
+		}
 	}
 
 	@Override
@@ -41,7 +46,10 @@ class TextFieldFilter extends DocumentFilter
 				.toString();
 
 		if (isValid(content)) //通過
+		{
 			super.replace(fb, offset, length, text, attrs);
+			onValid(content);
+		}
 	}
 
 	@Override
@@ -53,6 +61,9 @@ class TextFieldFilter extends DocumentFilter
 				.toString();
 
 		if (isValid(content)) //通過
+		{
 			super.remove(fb, offset, length);
+			onValid(content);
+		}
 	}
 }

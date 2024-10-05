@@ -37,8 +37,10 @@ public class ControlPanel extends PanelParent
 	private final JTextField[] passTextFields = new JTextField[3]; //經過時間輸入框
 	private final JButton setPassButton = new EButton("\u8a2d\u5b9a", buttonFont, "\u8a2d\u5b9a\u5df2\u904e\u6642\u9593"); //設定 設定已過時間
 
-	ControlPanel()
+	ControlPanel(MainWindow mainWindow)
 	{
+		super(mainWindow);
+
 		myPanel.setBounds(0, 0, MainWindow.WIDTH, MY_PANEL_HEIGHT);
 
 		myPanel.add(createFirstRow()); //第一列
@@ -133,7 +135,7 @@ public class ControlPanel extends PanelParent
 			timeOperation.setRemainTime(Integer.parseInt(remainTextFields[TimeOperation.MINUTE].getText()), TimeUnit.MINUTES);
 			timeOperation.setRemainTime(Integer.parseInt(remainTextFields[TimeOperation.SECOND].getText()), TimeUnit.SECONDS);
 
-			MainWindow.getInstance().timePanelManager.updateTimeLabel(); //更新新時間
+			mainWindow.timePanelManager.updateTimeLabel(); //更新新時間
 		});
 		thirdRow.add(setRemainButton);
 
@@ -149,7 +151,7 @@ public class ControlPanel extends PanelParent
 		add1Hour.addActionListener(event ->
 		{
 			timeOperation.addRemainTime(1, TimeUnit.HOURS);
-			MainWindow.getInstance().timePanelManager.updateTimeLabel();
+			mainWindow.timePanelManager.updateTimeLabel();
 		});
 		fourthRow.add(add1Hour);
 
@@ -157,7 +159,7 @@ public class ControlPanel extends PanelParent
 		add10Minutes.addActionListener(event ->
 		{
 			timeOperation.addRemainTime(10, TimeUnit.MINUTES);
-			MainWindow.getInstance().timePanelManager.updateTimeLabel();
+			mainWindow.timePanelManager.updateTimeLabel();
 		});
 		fourthRow.add(add10Minutes);
 
@@ -165,7 +167,7 @@ public class ControlPanel extends PanelParent
 		add1Minute.addActionListener(event ->
 		{
 			timeOperation.addRemainTime(1, TimeUnit.MINUTES);
-			MainWindow.getInstance().timePanelManager.updateTimeLabel();
+			mainWindow.timePanelManager.updateTimeLabel();
 		});
 		fourthRow.add(add1Minute);
 
@@ -217,12 +219,13 @@ public class ControlPanel extends PanelParent
 				case TimeOperation.MINUTE -> TimeUnit.MINUTES; //分鐘
 				default -> TimeUnit.SECONDS; //秒
 			};
+
 			if (isAdd) //是增加
 				timeOperation.addRemainTime(newValue, unit);
 			else //是減少
 				timeOperation.subtractRemainTime(newValue, unit);
 
-			MainWindow.getInstance().timePanelManager.updateTimeLabel(); //更新時間顯示
+			mainWindow.timePanelManager.updateTimeLabel(); //更新時間顯示
 		});
 		return addSubButton;
 	}
@@ -261,7 +264,7 @@ public class ControlPanel extends PanelParent
 			timeOperation.setPassTime(Integer.parseInt(passTextFields[TimeOperation.MINUTE].getText()), TimeUnit.MINUTES);
 			timeOperation.setPassTime(Integer.parseInt(passTextFields[TimeOperation.SECOND].getText()), TimeUnit.SECONDS);
 
-			MainWindow.getInstance().timePanelManager.updateTimeLabel(); //更新新時間
+			mainWindow.timePanelManager.updateTimeLabel(); //更新新時間
 		});
 		seventhRow.add(setPassButton);
 
@@ -274,11 +277,11 @@ public class ControlPanel extends PanelParent
 		eighthPanel.setBounds(LEFT_PADDING, BIG_GAP * 2 + SUB_PANEL_HEIGHT * 7, MainWindow.WIDTH, SUB_PANEL_HEIGHT);
 
 		JButton popOutRemainButton = new EButton("\u5269\u9918\u6642\u9593", buttonFont, "\u5f48\u51fa\u5269\u9918\u6642\u9593\u8996\u7a97"); //剩餘時間視窗 彈出剩餘時間視窗
-		popOutRemainButton.addActionListener(event -> MainWindow.getInstance().remainTimeWindow.setVisible()); //顯示彈出式視窗
+		popOutRemainButton.addActionListener(event -> mainWindow.remainTimeWindow.setVisible()); //顯示彈出式視窗
 		eighthPanel.add(popOutRemainButton);
 
 		JButton popOutPassButton = new EButton("\u5df2\u904e\u6642\u9593", buttonFont, "\u5f48\u51fa\u5df2\u904e\u6642\u9593\u8996\u7a97"); //已過時間視窗 彈出已過時間視窗
-		popOutPassButton.addActionListener(event -> MainWindow.getInstance().passTimeWindow.setVisible()); //顯示彈出式視窗
+		popOutPassButton.addActionListener(event -> mainWindow.passTimeWindow.setVisible()); //顯示彈出式視窗
 		eighthPanel.add(popOutPassButton);
 
 		URL linkURL = ControlPanel.class.getResource("/open.png"); //按鈕icon
