@@ -8,11 +8,30 @@
     <artifactId>Overwork</artifactId>
     <version>1.0</version>
 
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+    <name>Overwork</name>
+    <description>A Java program for countdown.</description>
+    <url>https://github.com/AlexCai2019/Overwork</url>
+
+    <licenses>
+        <license>
+            <name>GNU General Public License v3.0</name>
+            <url>https://github.com/AlexCai2019/Overwork/blob/lightweight/LICENSE</url>
+            <distribution>manual</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Alex Cai</name>
+            <email>alexcai910630@gmail.com</email>
+            <url>https://github.com/AlexCai2019</url>
+            <timezone>8</timezone>
+            <roles>
+                <role>Project Manager</role>
+                <role>Main Developer</role>
+            </roles>
+        </developer>
+    </developers>
 
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.json/json -->
@@ -23,5 +42,11 @@
             <version>20240303</version>
         </dependency>
     </dependencies>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
 </project>

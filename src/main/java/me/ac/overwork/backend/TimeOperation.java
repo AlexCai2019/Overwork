@@ -40,7 +40,7 @@ public class TimeOperation implements IHasDestructor
 		addTime(passTime, 1, TimeUnit.SECONDS); //增加經過時間一秒
 	}
 
-	private void addTime(int[] time, int value, TimeUnit unit)
+	private synchronized void addTime(int[] time, int value, TimeUnit unit)
 	{
 		switch (unit)
 		{
@@ -62,7 +62,7 @@ public class TimeOperation implements IHasDestructor
 		}
 	}
 
-	public void subtractRemainTime()
+	public synchronized void subtractRemainTime()
 	{
 		if (remainTime[HOUR] == 0 && remainTime[MINUTE] == 0 && remainTime[SECOND] == 0) //時間到了
 			return;
@@ -82,7 +82,7 @@ public class TimeOperation implements IHasDestructor
 		remainTime[HOUR]--;
 	}
 
-	public void subtractRemainTime(int value, TimeUnit unit)
+	public synchronized void subtractRemainTime(int value, TimeUnit unit)
 	{
 		switch (unit)
 		{
@@ -110,7 +110,7 @@ public class TimeOperation implements IHasDestructor
 		remainTime[HOUR] = totalInMinutes / 60; //以分為單位下 除以60會得到以時為單位 其中分和秒被無條件捨去了 例如120分 / 60 = 2時
 	}
 
-	public void setRemainTime(int value, TimeUnit unit)
+	public synchronized void setRemainTime(int value, TimeUnit unit)
 	{
 		switch (unit) //直接設定時間 caller應該做數值檢測
 		{
@@ -120,7 +120,7 @@ public class TimeOperation implements IHasDestructor
 		}
 	}
 
-	public void setPassTime(int value, TimeUnit unit)
+	public synchronized void setPassTime(int value, TimeUnit unit)
 	{
 		switch (unit) //直接設定時間 caller應該做數值檢測
 		{

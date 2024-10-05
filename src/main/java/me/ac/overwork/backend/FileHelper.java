@@ -38,7 +38,7 @@ public class FileHelper
 
 	void writeJSONToFile(String value) throws OverworkException
 	{
-		try (FileWriter writer = new FileWriter(JSONHelper.SAVE_FILE_NAME))
+		try (FileWriter writer = new FileWriter(JSONHelper.SAVE_FILE_NAME)) //打開檔案
 		{
 			writer.write(value); //寫入JSON
 		}

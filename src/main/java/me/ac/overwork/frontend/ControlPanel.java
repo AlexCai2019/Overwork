@@ -1,10 +1,7 @@
 package me.ac.overwork.frontend;
 
 import me.ac.overwork.backend.TimeOperation;
-import me.ac.overwork.frontend.swing_extend.EButton;
-import me.ac.overwork.frontend.swing_extend.EColor;
-import me.ac.overwork.frontend.swing_extend.ELabel;
-import me.ac.overwork.frontend.swing_extend.ETextField;
+import me.ac.overwork.frontend.swing_extend.*;
 
 import javax.swing.*;
 import javax.swing.text.PlainDocument;
