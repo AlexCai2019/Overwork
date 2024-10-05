@@ -10,7 +10,7 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 
 @SuppressWarnings("UnnecessaryUnicodeEscape")
-public class FileHelper
+class FileHelper
 {
 	static final FileHelper instance = new FileHelper();
 

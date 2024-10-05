@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @SuppressWarnings("UnnecessaryUnicodeEscape")
-public class JSONHelper
+class JSONHelper
 {
 	private static JSONHelper instance;
 
