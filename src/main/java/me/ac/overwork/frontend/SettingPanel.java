@@ -6,7 +6,6 @@ import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.PlainDocument;
 import java.awt.*;
-import java.util.Locale;
 
 @SuppressWarnings("UnnecessaryUnicodeEscape") //為了避免亂碼
 public class SettingPanel extends PanelParent
@@ -72,7 +71,6 @@ public class SettingPanel extends PanelParent
 		constraints.gridx = 3; //第3行
 		constraints.gridwidth = 1; //佔1行
 		JButton chooserButton = new EButton("\u9078\u64c7", buttonFont, "\u9078\u64c7\u984f\u8272"); //選擇 選擇顏色
-		JColorChooser.setDefaultLocale(Locale.TRADITIONAL_CHINESE); //語言預設繁體中文 (好像沒效果)
 		chooserButton.addActionListener(event ->
 		{
 			//顏色選擇視窗 不含alpha

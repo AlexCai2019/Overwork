@@ -26,8 +26,8 @@ public class TimeOperation implements IHasDestructor
 	{
 		//讀取失敗就會throw
 		JSONHelper jsonCore = JSONHelper.getInstance(); //JSON處理核心
-		remainTime = jsonCore.getTimeArray(JSONHelper.TimeType.remainTime); //剩餘時間
-		passTime = jsonCore.getTimeArray(JSONHelper.TimeType.passTime); //經過時間
+		remainTime = jsonCore.getTimeArray(TimeType.remainTime); //剩餘時間
+		passTime = jsonCore.getTimeArray(TimeType.passTime); //經過時間
 	}
 
 	public void addRemainTime(int value, TimeUnit unit)
@@ -176,8 +176,16 @@ public class TimeOperation implements IHasDestructor
 	public void onApplicationQuit() throws OverworkException
 	{
 		JSONHelper jsonCore = JSONHelper.getInstance();
-		jsonCore.setTimeArray(JSONHelper.TimeType.remainTime, remainTime); //儲存到JSON
-		jsonCore.setTimeArray(JSONHelper.TimeType.passTime, passTime); //儲存到JSON
+		jsonCore.setTimeArray(TimeType.remainTime, remainTime); //儲存到JSON
+		jsonCore.setTimeArray(TimeType.passTime, passTime); //儲存到JSON
 		pauseTimer(); //結束計時
+	}
+
+	enum TimeType //remainTime或passTime, 取決於要獲得已過還是剩餘
+	{
+		//千萬不可以改這兩個變數的名字 它們和json key有關
+		//enum的toString是變數的名字
+		remainTime, //toString會是remainTime
+		passTime //toString會是passTime
 	}
 }

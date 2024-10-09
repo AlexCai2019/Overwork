@@ -24,7 +24,7 @@ class FileHelper
 		}
 		catch (NoSuchFileException nsfE)
 		{
-			throw new OverworkException("\u627e\u4e0d\u5230 \"" + JSONHelper.SAVE_FILE_NAME + "\" \u6a94\u6848"); //找不到 "save.json" 檔案
+			throw new OverworkException("\u627e\u4e0d\u5230 \"" + JSONHelper.SAVE_FILE_NAME + "\" \u6a94\u6848\uff0c\u8acb\u5c07 \"Overwork.jar\" \u548c \"" + JSONHelper.SAVE_FILE_NAME + "\" \u653e\u5728\u540c\u500b\u8cc7\u6599\u593e\u5167"); //找不到 "save.json" 檔案，請將 "Overwork.jar" 和save.json放在同個資料夾內
 		}
 		catch (CharacterCodingException ccE)
 		{

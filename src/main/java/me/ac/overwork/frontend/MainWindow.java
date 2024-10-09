@@ -8,6 +8,7 @@ import java.awt.Font;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.net.URL;
+import java.util.Locale;
 
 @SuppressWarnings("UnnecessaryUnicodeEscape") //為了避免亂碼
 public class MainWindow
@@ -39,9 +40,10 @@ public class MainWindow
 	private MainWindow()
 	{
 		//加班台倒數
+		JComponent.setDefaultLocale(Locale.TRADITIONAL_CHINESE); //語言預設繁體中文 (好像沒效果)
 		JFrame mainWindow = new JFrame("\u52a0\u73ed\u53f0\u5012\u6578"); //加班台倒數
 		URL icon = MainWindow.class.getResource("/clock.png");
-		if (icon != null) //有讀到
+		if (icon != null) //有讀到檔案
 			mainWindow.setIconImage(new ImageIcon(icon).getImage());
 		mainWindow.addWindowListener(new WindowAdapter() //按叉叉就結束
 		{
