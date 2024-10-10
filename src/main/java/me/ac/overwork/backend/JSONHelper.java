@@ -31,7 +31,7 @@ class JSONHelper
 	static final String SIZE = "size";
 
 	private final JSONObject save;
-	private final Map<TimeOperation.TimeType, JSONObject> saveMap = new EnumMap<>(TimeOperation.TimeType.class);
+	private final Map<TimeType, JSONObject> saveMap = new EnumMap<>(TimeType.class);
 
 	private JSONHelper() throws OverworkException
 	{
@@ -44,11 +44,11 @@ class JSONHelper
 			throw new OverworkException(e);
 		}
 
-		initialSaveMap(TimeOperation.TimeType.remainTime); //初始化remainTime
-		initialSaveMap(TimeOperation.TimeType.passTime); //初始化passTime
+		initialSaveMap(TimeType.remainTime); //初始化remainTime
+		initialSaveMap(TimeType.passTime); //初始化passTime
 	}
 
-	private void initialSaveMap(TimeOperation.TimeType timeKey) throws OverworkException
+	private void initialSaveMap(TimeType timeKey) throws OverworkException
 	{
 		Object timeObject = save.opt(timeKey.toString()); //從save裡面找remainTime或passTime
 		if (timeObject instanceof JSONObject time) //找到了 而且是正確的(json object)
@@ -59,7 +59,7 @@ class JSONHelper
 			throw new OverworkException(SAVE_FILE_NAME + " \u7684 \"" + timeKey + "\" \u683c\u5f0f\u932f\u8aa4"); //save.json 的 "timeKey" 格式錯誤
 	}
 
-	int[] getTimeArray(TimeOperation.TimeType timeType) throws OverworkException
+	int[] getTimeArray(TimeType timeType) throws OverworkException
 	{
 		JSONObject timeObject = saveMap.get(timeType); //尋找timeKey
 
@@ -79,7 +79,7 @@ class JSONHelper
 		return timeArray;
 	}
 
-	void setTimeArray(TimeOperation.TimeType timeType, int[] values) throws OverworkException
+	void setTimeArray(TimeType timeType, int[] values) throws OverworkException
 	{
 		JSONObject timeObject = saveMap.get(timeType); //不可能為null 如果真是null 一定是initialSaveMap時沒有正確擲出例外
 		timeObject.put(HOUR, values[TimeOperation.HOUR]);
@@ -93,7 +93,7 @@ class JSONHelper
 	}
 
 	@SuppressWarnings("unchecked")
-	<T> T get(TimeOperation.TimeType timeType, String key, T defaultValue, Class<T> type)
+	<T> T get(TimeType timeType, String key, T defaultValue, Class<T> type)
 	{
 		JSONObject timeObject = saveMap.get(timeType); //remainTime或passTime
 		if (timeObject == null) //找不到
@@ -103,7 +103,7 @@ class JSONHelper
 		return type.isInstance(obj) ? (T) obj : defaultValue;
 	}
 
-	void put(TimeOperation.TimeType timeType, String key, Object value)
+	void put(TimeType timeType, String key, Object value)
 	{
 		JSONObject timeObject = saveMap.get(timeType); //remainTime或passTime
 		if (timeObject != null)
