@@ -51,17 +51,11 @@ public class BackendCore implements IHasDestructor
 	 */
 	private final TimeOperation timeOperation;
 	/**
-	 * 顏色處理核心。
+	 * 設定處理核心。
 	 *
-	 * @since 2024/10/03
+	 * @since 2024/10/10
 	 */
-	private final ColorOperation colorOperation;
-	/**
-	 * 字型大小處理核心。
-	 *
-	 * @since 2024/10/04
-	 */
-	private final SizeOperation sizeOperation;
+	private final SettingOperation settingOperation;
 
 	/**
 	 * 後端核心建構子，產生其他的核心。
@@ -75,8 +69,7 @@ public class BackendCore implements IHasDestructor
 		Locale.setDefault(Locale.TRADITIONAL_CHINESE); //語言預設繁體中文
 		JSONHelper.createInstance(); //讓後端核心從檔案中讀取資料 有任何例外就丟給main
 		timeOperation = new TimeOperation(); //建立時間處理核心 有任何例外就丟給main
-		colorOperation = new ColorOperation(); //建立顏色處理核心
-		sizeOperation = new SizeOperation(); //建立字型大小處理核心
+		settingOperation = new SettingOperation(); //建立設定處理核心
 	}
 
 	/**
@@ -92,27 +85,15 @@ public class BackendCore implements IHasDestructor
 	}
 
 	/**
-	 * 獲得顏色處理核心。
+	 * 獲得設定處理核心。
 	 *
-	 * @return 顏色處理核心
-	 * @since 2024/10/03
+	 * @return 設定處理核心
+	 * @since 2024/10/10
 	 * @author Alex Cai
 	 */
-	public ColorOperation getColorOperation()
+	public SettingOperation getSettingOperation()
 	{
-		return colorOperation;
-	}
-
-	/**
-	 * 獲得字型大小處理核心。
-	 *
-	 * @return 字型大小處理核心
-	 * @since 2024/10/04
-	 * @author Alex Cai
-	 */
-	public SizeOperation getSizeOperation()
-	{
-		return sizeOperation;
+		return settingOperation;
 	}
 
 	/**
@@ -126,8 +107,7 @@ public class BackendCore implements IHasDestructor
 	public void onApplicationQuit() throws OverworkException
 	{
 		timeOperation.onApplicationQuit();
-		colorOperation.onApplicationQuit();
-		sizeOperation.onApplicationQuit();
-		JSONHelper.getInstance().saveJSON(); //上面三個存好JSON後 將JSON寫進檔案
+		settingOperation.onApplicationQuit();
+		JSONHelper.getInstance().saveJSON(); //上面兩個存好JSON後 將JSON寫進檔案
 	}
 }

@@ -1,8 +1,7 @@
 package me.ac.overwork.frontend;
 
 import me.ac.overwork.backend.BackendCore;
-import me.ac.overwork.backend.ColorOperation;
-import me.ac.overwork.backend.SizeOperation;
+import me.ac.overwork.backend.SettingOperation;
 import me.ac.overwork.backend.TimeOperation;
 
 import javax.swing.*;
@@ -15,8 +14,7 @@ abstract class PopOutWindow
 	protected final JLabel myLabel = new JLabel("", SwingConstants.CENTER); //顯示的文字
 
 	protected final TimeOperation timeOperation = BackendCore.getInstance().getTimeOperation();
-	protected final ColorOperation colorOperation = BackendCore.getInstance().getColorOperation();
-	protected final SizeOperation sizeOperation = BackendCore.getInstance().getSizeOperation();
+	protected final SettingOperation settingOperation = BackendCore.getInstance().getSettingOperation();
 
 	PopOutWindow()
 	{

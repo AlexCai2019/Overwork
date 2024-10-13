@@ -1,6 +1,7 @@
 package me.ac.overwork.frontend;
 
 import me.ac.overwork.backend.TimeOperation;
+import me.ac.overwork.backend.TimeType;
 import me.ac.overwork.frontend.swing_extend.ELabel;
 
 import javax.swing.*;
@@ -28,18 +29,18 @@ public class TimePanel extends PanelParent
 		remainTimeText.setBounds(10, 0, 18 * 4, MY_PANEL_HEIGHT / 2);
 		myPanel.add(remainTimeText);
 
-		remainTimeLabel.setFont(new Font(MainWindow.FONT_NAME, Font.BOLD, sizeOperation.remainTimeSize)); //從後端載入字型大小
+		remainTimeLabel.setFont(new Font(MainWindow.FONT_NAME, Font.BOLD, settingOperation.getSize(TimeType.remainTime))); //從後端載入字型大小
 		remainTimeLabel.setBounds(18 * 4, 0, MainWindow.WIDTH - 18 * 4, MY_PANEL_HEIGHT / 2);
-		remainTimeLabel.setForeground(new Color(colorOperation.remainTimeColor)); //從後端載入顏色
+		remainTimeLabel.setForeground(new Color(settingOperation.getColor(TimeType.remainTime))); //從後端載入顏色
 		myPanel.add(remainTimeLabel); //放入panel中
 
 		JLabel passTimeText = new ELabel("\u7d93\u904e\u6642\u9593", fixedTextFont); //經過時間
 		passTimeText.setBounds(10, MY_PANEL_HEIGHT / 2, 18 * 4, MY_PANEL_HEIGHT / 2);
 		myPanel.add(passTimeText);
 
-		passTimeLabel.setFont(new Font(MainWindow.FONT_NAME, Font.BOLD, sizeOperation.passTimeSize)); //從後端載入字型大小
+		passTimeLabel.setFont(new Font(MainWindow.FONT_NAME, Font.BOLD,  settingOperation.getSize(TimeType.passTime))); //從後端載入字型大小
 		passTimeLabel.setBounds(18 * 4, MY_PANEL_HEIGHT / 2, MainWindow.WIDTH - 18 * 4, MY_PANEL_HEIGHT / 2);
-		passTimeLabel.setForeground(new Color(colorOperation.passTimeColor)); //從後端載入顏色
+		passTimeLabel.setForeground(new Color(settingOperation.getColor(TimeType.passTime))); //從後端載入顏色
 		myPanel.add(passTimeLabel); //放入panel中
 	}
 
